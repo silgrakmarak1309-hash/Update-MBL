@@ -982,9 +982,43 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
       seenQ.add(key);
       return true;
     });  }catch(err){    return list.filter(l => l && !deletedIds.includes(l.id) && l.status !== "deleted");  }}async function syncLocalListingsToSupabase(){try{const{data:authData}=await L.auth.getUser();if(!authData||!authData.user)return;const userId=authData.user.id;const delList=JSON.parse(localStorage.getItem("deleted_listing_ids")||"[]");const localList=JSON.parse(localStorage.getItem("user_custom_listings")||"[]");const unsynced=localList.filter(l=>l&&(l.user_id===userId||!l.user_id)&&l.status!=="deleted"&&!delList.includes(l.id)&&!l._synced_to_supabase);if(unsynced.length===0)return;const isUuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;let locList=[];try{locList=await $c();}catch(e){}for(const item of unsynced){let locId=(item.location_id&&isUuid.test(item.location_id))?item.location_id:null;if(!locId&&locList.length>0){const match=locList.find(l=>l&&l.name&&(l.name.toLowerCase().includes((item.town||"").toLowerCase())||l.name.toLowerCase().includes((item.district||"").toLowerCase())||l.name.toLowerCase().includes((item.state||"").toLowerCase())));if(match&&match.id&&isUuid.test(match.id))locId=match.id;}if(!locId)locId="27d3e482-b66a-41d5-8844-366b1f08062a";const payload={user_id:userId,title:item.title,category_id:(item.category_id&&isUuid.test(item.category_id))?item.category_id:"3ed03846-ea53-4f52-9db5-17550b75f3f2",location_id:locId,price:Number(item.price)||0,condition:item.condition||"used",description:item.description||"",phone:item.phone||"",whatsapp:item.whatsapp||item.phone||"",images:item.images||[],status:"active",is_featured:!!item.is_featured};try{const{data:ins,error:err}=await L.from("listings").insert(payload).select("*, category:categories(*), location:locations(*)").single();if(!err&&ins){item._synced_to_supabase=!0;item.id=ins.id;}}catch(err2){}}localStorage.setItem("user_custom_listings",JSON.stringify(localList));}catch(e){}}
-async function syncCloudConfig(updates) {  try {    let tUser = null;    try { const { data: t } = await L.auth.getUser(); if (t && t.user) tUser = t.user; } catch(e) {}    if (!tUser) {      try { const { data: s } = await L.auth.getSession(); if (s && s.session && s.session.user) tUser = s.session.user; } catch(e) {}    }    const isUUID = str => typeof str === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);    const syncUid = (tUser?.id && isUUID(tUser.id)) ? tUser.id : "54d69b2e-76f7-410d-84fc-af00f7101786";    let currentConfig = {};    try {      const { data: cData } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);      if (cData && cData[0] && cData[0].description) {        currentConfig = JSON.parse(cData[0].description);      }    } catch(e) {}    const merged = Object.assign({}, currentConfig, updates, { updated_at: new Date().toISOString() });    await L.from("listings").insert({      user_id: syncUid,      title: "[SYS_APP_CONFIG]",      category_id: "3ed03846-ea53-4f52-9db5-17550b75f3f2",      location_id: "02ef9e15-c49f-459e-916c-2432e90dd230",      price: 0,      condition: "new",      description: JSON.stringify(merged),      phone: "9876543210",      whatsapp: "9876543210",      images: [],      status: "active",      is_featured: false    });  } catch(err) {    console.warn("Cloud config sync error:", err);  }}
-
-async function sendAdminNotification(notifData) {
+async function syncCloudConfig(updates) {
+  try {
+    let tUser = null;
+    try { const { data: t } = await L.auth.getUser(); if (t && t.user) tUser = t.user; } catch(e) {}
+    if (!tUser) {
+      try { const { data: s } = await L.auth.getSession(); if (s && s.session && s.session.user) tUser = s.session.user; } catch(e) {}
+    }
+    const isUUID = str => typeof str === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+    const syncUid = (tUser?.id && isUUID(tUser.id)) ? tUser.id : "54d69b2e-76f7-410d-84fc-af00f7101786";
+    let currentConfig = {};
+    try {
+      const { data: cData } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);
+      if (cData && cData[0] && cData[0].description) {
+        currentConfig = JSON.parse(cData[0].description);
+      }
+    } catch(e) {}
+    const merged = Object.assign({}, currentConfig, updates, { updated_at: new Date().toISOString() });
+    const { error: insErr } = await L.from("listings").insert({
+      user_id: syncUid,
+      title: "[SYS_APP_CONFIG]",
+      category_id: "3ed03846-ea53-4f52-9db5-17550b75f3f2",
+      location_id: "02ef9e15-c49f-459e-916c-2432e90dd230",
+      price: 0,
+      condition: "new",
+      description: JSON.stringify(merged),
+      phone: "9876543210",
+      whatsapp: "9876543210",
+      images: [],
+      status: "active",
+      is_featured: false
+    });
+    if (insErr) throw insErr;
+  } catch(err) {
+    console.warn("Cloud config sync error:", err);
+    throw err;
+  }
+}async function sendAdminNotification(notifData) {
   if (!notifData) return null;
   const nowIso = new Date().toISOString();
   const notifObj = {
@@ -3385,36 +3419,51 @@ try {
 }
 async function X1(e){const{data:t,error:n}=await L.from("transactions").select("*").eq("user_id",e).order("created_at",{ascending:!1});if(n)throw n;return t}async function Z1(e,t){const n=e.name.split(".").pop()||"jpg",r=`avatars/${t}-${Date.now()}.${n}`,{data:s,error:i}=await L.storage.from("media").upload(r,e,{contentType:e.type,upsert:!0});if(i)throw i;const{data:l}=L.storage.from("media").getPublicUrl(s.path);return l.publicUrl}async function ej(e,t){const n=e.name.split(".").pop()||"jpg",r=`proofs/${t}-${Date.now()}.${n}`,{data:s,error:i}=await L.storage.from("media").upload(r,e,{contentType:e.type,upsert:!1});if(i)throw i;const{data:l}=L.storage.from("media").getPublicUrl(s.path);return l.publicUrl}async function tj(){
   const n = {
-    upi_id: (typeof window !== "undefined" && (localStorage.getItem("settings_upi_id") || localStorage.getItem("app_upi_id"))) || "grejamarak@oksbi",
-    payment_qr_code: (typeof window !== "undefined" && (localStorage.getItem("settings_payment_qr_code") || localStorage.getItem("app_payment_qr_code"))) || "",
+    upi_id: "grejamarak@oksbi",
+    payment_qr_code: "",
     payment_instructions: "1. Open any UPI app (GPay, PhonePe, Paytm). 2. Scan the QR code or pay to the UPI ID shown. 3. Enter the exact amount for your chosen plan. 4. After payment, copy the UTR/Transaction ID. 5. Come back and submit the UTR to activate your PRO membership.",
     tutorial_video_title: "How to pay for PRO membership",
     tutorial_active: "false"
   };
   try {
-    const {data: e, error: t} = await L.from("settings").select("key, value").eq("is_public", !0);
+    const { data: e, error: t } = await L.from("settings").select("key, value");
     if (!t && e && Array.isArray(e)) {
       e.forEach(r => {
-        if (r.key && r.value !== undefined && r.value !== null) {
+        if (r && r.key && r.value !== undefined && r.value !== null) {
           n[r.key] = String(r.value);
         }
       });
     }
   } catch(err){}
   try {
-    const local = JSON.parse(localStorage.getItem("admin_settings") || "{}");
-    Object.keys(local).forEach(k => {
-      if (local[k] && local[k].value !== undefined && local[k].value !== null) {
-        n[k] = String(local[k].value);
+    const { data: cData, error: cErr } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);
+    if (!cErr && cData && cData[0] && cData[0].description) {
+      const cfg = JSON.parse(cData[0].description);
+      if (cfg && typeof cfg === "object") {
+        Object.keys(cfg).forEach(function(k) {
+          if (k !== "plans" && cfg[k] !== undefined && cfg[k] !== null) {
+            n[k] = String(cfg[k]).trim();
+          }
+        });
       }
-    });
-    const directUpi = localStorage.getItem("settings_upi_id") || localStorage.getItem("app_upi_id");
-    if (directUpi !== null && directUpi !== undefined && directUpi !== "") {
-      n.upi_id = String(directUpi).trim();
     }
-    const directQr = localStorage.getItem("settings_payment_qr_code") || localStorage.getItem("app_payment_qr_code");
-    if (directQr !== null && directQr !== undefined && directQr !== "") {
-      n.payment_qr_code = String(directQr).trim();
+  } catch(e) {}
+  try {
+    if (typeof window !== "undefined") {
+      const local = JSON.parse(localStorage.getItem("admin_settings") || "{}");
+      Object.keys(local).forEach(k => {
+        if (!n[k] && local[k] && local[k].value !== undefined && local[k].value !== null) {
+          n[k] = String(local[k].value);
+        }
+      });
+      const directUpi = localStorage.getItem("settings_upi_id") || localStorage.getItem("app_upi_id");
+      if (!n.upi_id && directUpi) {
+        n.upi_id = String(directUpi).trim();
+      }
+      const directQr = localStorage.getItem("settings_payment_qr_code") || localStorage.getItem("app_payment_qr_code");
+      if (!n.payment_qr_code && directQr) {
+        n.payment_qr_code = String(directQr).trim();
+      }
     }
   } catch(err){}
   return n;
