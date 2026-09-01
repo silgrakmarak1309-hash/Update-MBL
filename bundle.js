@@ -111,87 +111,67 @@ Option 2: Install and provide the "ws" package:
 function getDeviceFingerprint() {
   if (typeof window === "undefined") return "dev_server";
   let devId = "";
+  
   try {
-    devId = localStorage.getItem("mlb_permanent_device_id") || "";
+    devId = localStorage.getItem("mlb_device_uid_v2") || localStorage.getItem("mlb_permanent_device_id") || "";
   } catch(e) {}
+  
   if (!devId) {
     try {
-      const match = document.cookie.match(/(?:^|; )mlb_permanent_device_id=([^;]*)/);
+      const match = document.cookie.match(/(?:^|; )mlb_device_uid_v2=([^;]*)/) || document.cookie.match(/(?:^|; )mlb_permanent_device_id=([^;]*)/);
       if (match) devId = decodeURIComponent(match[1]);
     } catch(e) {}
   }
   
-  const hwParts = [];
-  try {
-    hwParts.push(navigator.userAgent || "");
-    hwParts.push(navigator.platform || "");
-    hwParts.push(navigator.hardwareConcurrency || "");
-    hwParts.push(navigator.maxTouchPoints || "");
-    if (typeof screen !== "undefined") {
-      hwParts.push(screen.width + "x" + screen.height + "x" + (screen.colorDepth || 24) + "x" + (window.devicePixelRatio || 1));
-    }
-    if (typeof Intl !== "undefined" && Intl.DateTimeFormat) {
-      hwParts.push(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
-    }
-  } catch(e) {}
-
-  try {
-    const canvas = document.createElement("canvas");
-    canvas.width = 200;
-    canvas.height = 40;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.textBaseline = "top";
-      ctx.font = "14px Arial, sans-serif";
-      ctx.fillStyle = "#ff6600";
-      ctx.fillRect(10, 5, 80, 25);
-      ctx.fillStyle = "#006699";
-      ctx.fillText("MeriLocalBazaar#Dev2026", 15, 10);
-      ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-      ctx.fillText("MeriLocalBazaar#Dev2026", 17, 12);
-      hwParts.push(canvas.toDataURL());
-    }
-  } catch(e) {}
-
-  const rawStr = hwParts.join("~~~");
-  let h1 = 0x811c9dc5, h2 = 0x1b34a64b;
-  for (let i = 0; i < rawStr.length; i++) {
-    const ch = rawStr.charCodeAt(i);
-    h1 = (h1 ^ ch) * 0x01000193 >>> 0;
-    h2 = (h2 ^ (ch << 1)) * 0x01000193 >>> 0;
-  }
-  const hwHash = "dev_" + Math.abs(h1).toString(36) + "_" + Math.abs(h2).toString(36);
-
   if (!devId) {
-    devId = hwHash;
+    try {
+      devId = sessionStorage.getItem("mlb_device_uid_v2") || sessionStorage.getItem("mlb_permanent_device_id") || "";
+    } catch(e) {}
   }
+  
+  if (!devId && window.__mlb_device_uid) {
+    devId = window.__mlb_device_uid;
+  }
+  
+  if (!devId) {
+    const randomPart = (typeof crypto !== "undefined" && crypto.randomUUID) 
+      ? crypto.randomUUID().replace(/-/g, "").substring(0, 16)
+      : (Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10));
+    devId = "dev_" + Date.now().toString(36) + "_" + randomPart;
+  }
+  
   try {
+    localStorage.setItem("mlb_device_uid_v2", devId);
     localStorage.setItem("mlb_permanent_device_id", devId);
+    sessionStorage.setItem("mlb_device_uid_v2", devId);
+    window.__mlb_device_uid = devId;
+    document.cookie = "mlb_device_uid_v2=" + encodeURIComponent(devId) + "; path=/; max-age=315360000; SameSite=Lax";
     document.cookie = "mlb_permanent_device_id=" + encodeURIComponent(devId) + "; path=/; max-age=315360000; SameSite=Lax";
   } catch(e) {}
+  
   return devId;
 }
 
 async function checkDeviceLoginAllowedAsync(email) {
   if (!email) return { allowed: false, message: "Please enter a valid email address." };
   const cleanEmail = String(email).toLowerCase().trim();
+  
   if (isUserAdmin({ email: cleanEmail })) {
     return { allowed: true, isAdmin: true };
   }
+  
   const devId = getDeviceFingerprint();
   let boundEmail = "";
   
-  // 1. Check local persistent storage
   try {
-    boundEmail = localStorage.getItem("mlb_bound_device_" + devId) || localStorage.getItem("mlb_bound_device_email") || localStorage.getItem("mlb_device_registered_email") || "";
+    boundEmail = localStorage.getItem("mlb_bound_email_" + devId) || localStorage.getItem("mlb_bound_device_" + devId) || "";
     if (!boundEmail) {
-      const match = document.cookie.match(new RegExp("(?:^|; )mlb_bound_email=([^;]*)"));
+      const match = document.cookie.match(new RegExp("(?:^|; )mlb_bound_email_" + devId + "=([^;]*)"));
       if (match) boundEmail = decodeURIComponent(match[1]);
     }
     boundEmail = String(boundEmail).toLowerCase().trim();
   } catch(e) {}
-
-  // 2. Query Firebase/Supabase backend cloud registry
+  
   try {
     const { data: cData } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);
     if (cData && cData[0] && cData[0].description) {
@@ -201,15 +181,21 @@ async function checkDeviceLoginAllowedAsync(email) {
       }
     }
   } catch(e) {}
-
-  if (boundEmail && boundEmail !== cleanEmail) {
-    return {
-      allowed: false,
-      boundEmail: boundEmail,
-      message: "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device."
-    };
+  
+  if (boundEmail) {
+    if (boundEmail === cleanEmail) {
+      return { allowed: true, boundEmail: boundEmail, devId: devId };
+    } else {
+      return {
+        allowed: false,
+        boundEmail: boundEmail,
+        devId: devId,
+        message: "This device is already registered with another account (" + boundEmail + "). Only the registered Gmail/Email ID can be used on this device."
+      };
+    }
   }
-  return { allowed: true, isAdmin: false, devId: devId };
+  
+  return { allowed: true, isNewDevice: true, devId: devId };
 }
 
 function checkDeviceLoginAllowed(email) {
@@ -221,17 +207,22 @@ function checkDeviceLoginAllowed(email) {
   const devId = getDeviceFingerprint();
   let boundEmail = "";
   try {
-    boundEmail = localStorage.getItem("mlb_bound_device_" + devId) || localStorage.getItem("mlb_bound_device_email") || localStorage.getItem("mlb_device_registered_email") || "";
+    boundEmail = localStorage.getItem("mlb_bound_email_" + devId) || localStorage.getItem("mlb_bound_device_" + devId) || "";
+    if (!boundEmail) {
+      const match = document.cookie.match(new RegExp("(?:^|; )mlb_bound_email_" + devId + "=([^;]*)"));
+      if (match) boundEmail = decodeURIComponent(match[1]);
+    }
     boundEmail = String(boundEmail).toLowerCase().trim();
   } catch(e) {}
   if (boundEmail && boundEmail !== cleanEmail) {
     return {
       allowed: false,
       boundEmail: boundEmail,
-      message: "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device."
+      devId: devId,
+      message: "This device is already registered with another account (" + boundEmail + "). Only the registered Gmail/Email ID can be used on this device."
     };
   }
-  return { allowed: true, isAdmin: false };
+  return { allowed: true, devId: devId };
 }
 
 async function bindDeviceEmailAsync(email) {
@@ -240,15 +231,12 @@ async function bindDeviceEmailAsync(email) {
   if (isUserAdmin({ email: cleanEmail })) return;
   const devId = getDeviceFingerprint();
   
-  // 1. Save locally
   try {
+    localStorage.setItem("mlb_bound_email_" + devId, cleanEmail);
     localStorage.setItem("mlb_bound_device_" + devId, cleanEmail);
-    localStorage.setItem("mlb_bound_device_email", cleanEmail);
-    localStorage.setItem("mlb_device_registered_email", cleanEmail);
-    document.cookie = "mlb_bound_email=" + encodeURIComponent(cleanEmail) + "; path=/; max-age=315360000; SameSite=Lax";
+    document.cookie = "mlb_bound_email_" + encodeURIComponent(devId) + "=" + encodeURIComponent(cleanEmail) + "; path=/; max-age=315360000; SameSite=Lax";
   } catch(e) {}
-
-  // 2. Save to Backend Database
+  
   try {
     let currentBindings = {};
     const { data: cData } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);
