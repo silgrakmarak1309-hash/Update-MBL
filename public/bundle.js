@@ -901,7 +901,7 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
     }
   } catch(err) {}
   try {
-    let t = L.from("listings").select(`*, category:categories(*), location:locations(*)`).eq("status", "active");
+    let t = L.from("listings").select(`*, category:categories(*), location:locations(*)`).eq("status", "active").not("title", "like", "[SYS_%").not("title", "like", "SYS_%");
     if (e.search) t = t.or(`title.ilike.%${e.search}%,description.ilike.%${e.search}%`);
     if (e.categoryId) t = t.eq("category_id", e.categoryId);
     if (e.locationId) t = t.eq("location_id", e.locationId);
@@ -921,7 +921,7 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
     if (!r && n && n.length > 0) {
       list = n;
     } else {
-      let tSimple = L.from("listings").select("*").eq("status", "active");
+      let tSimple = L.from("listings").select("*").eq("status", "active").not("title", "like", "[SYS_%").not("title", "like", "SYS_%");
       if (e.categoryId) tSimple = tSimple.eq("category_id", e.categoryId);
       if (e.locationId) tSimple = tSimple.eq("location_id", e.locationId);
       const { data: nSimple } = await tSimple.order("created_at", { ascending: !1 });
@@ -929,7 +929,7 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
     }
   } catch(err) {
     try {
-      const { data: nSimple } = await L.from("listings").select("*").eq("status", "active").order("created_at", { ascending: !1 });
+      const { data: nSimple } = await L.from("listings").select("*").eq("status", "active").not("title", "like", "[SYS_%").not("title", "like", "SYS_%").order("created_at", { ascending: !1 }).limit(100);
       if (nSimple && nSimple.length > 0) list = nSimple;
     } catch(err2) {}
   }
@@ -952,9 +952,7 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
     list = Object.values(map);
   } catch(err) {}
   let approvedTopProListingIds = new Set();
-  let approvedTopProTitles = new Set();
   let pendingOrRejectedTopProIds = new Set();
-  let pendingOrRejectedTopProTitles = new Set();
   try {
     const allRechargeReqs = [
       ...(JSON.parse(localStorage.getItem("all_recharge_requests") || "[]")),
@@ -967,13 +965,11 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
       }
     });
     allRechargeReqs.forEach(r => {
-      if (r && (r.plan_id === "plan_single_top_pro" || r.amount === 10 || r.amount === 20 || r.is_top_pro || r.listing_title)) {
-        if (r.status === "approved") {
-          if (r.listing_id) approvedTopProListingIds.add(r.listing_id);
-          if (r.listing_title) approvedTopProTitles.add(r.listing_title.trim().toLowerCase());
-        } else if (r.status === "pending" || r.status === "rejected") {
-          if (r.listing_id) pendingOrRejectedTopProIds.add(r.listing_id);
-          if (r.listing_title) pendingOrRejectedTopProTitles.add(r.listing_title.trim().toLowerCase());
+      if (r && (r.plan_id === "plan_single_top_pro" || r.amount === 30 || r.is_top_pro || r.type === "top_pro_boost")) {
+        if (r.status === "approved" && r.listing_id) {
+          approvedTopProListingIds.add(r.listing_id);
+        } else if ((r.status === "pending" || r.status === "rejected") && r.listing_id) {
+          pendingOrRejectedTopProIds.add(r.listing_id);
         }
       }
     });
@@ -983,16 +979,17 @@ function ta({listing:e,seller:t,isFavorited:n,onFavoriteToggle:r}){if(!e)return 
       if (overrides[l.id].status) l.status = overrides[l.id].status;
       if (overrides[l.id].is_featured !== undefined) l.is_featured = overrides[l.id].is_featured;
     }
-    const lTitleLower = (l.title || "").trim().toLowerCase();
-    if (approvedTopProListingIds.has(l.id) || approvedTopProTitles.has(lTitleLower)) {
+    if (approvedTopProListingIds.has(l.id)) {
       if (!overrides[l.id] || overrides[l.id].is_featured !== false) {
         l.is_featured = true;
       }
+    } else if (pendingOrRejectedTopProIds.has(l.id)) {
+      if (!overrides[l.id] || overrides[l.id].is_featured === undefined) {
+        l.is_featured = false;
+      }
     }
     if (l.is_featured !== true) {
-      if (approvedTopProListingIds.has(l.id) || approvedTopProTitles.has(lTitleLower)) {
-        l.is_featured = true;
-      }
+      l.is_featured = false;
     }
     if (!l.location || !l.location.name || l.location.name === "Unknown") {
       const formatted = formatListingLocation(l);
@@ -1672,7 +1669,7 @@ async function u1(e){  try {    const delList = JSON.parse(localStorage.getItem(
 
   return dedupedUsers;
 }
-async function Gp(){  let list=[];  let deletedIds = [];  let overrides = {};  try { deletedIds = JSON.parse(localStorage.getItem("deleted_listing_ids") || "[]"); } catch(err) {}  try { overrides = JSON.parse(localStorage.getItem("listing_status_overrides") || "{}"); } catch(err) {}  try {    const { data: sysRows } = await L.from("listings").select("title, description").in("title", ["[SYS_DELETED_LISTING]", "[SYS_APP_CONFIG]"]).order("created_at", { ascending: false }).limit(200);    if (sysRows && Array.isArray(sysRows)) {      sysRows.forEach(function(row) {        if (!row || !row.description) return;        try {          const parsed = JSON.parse(row.description);          if (row.title === "[SYS_DELETED_LISTING]" && parsed && parsed.deleted_id) {            if (!deletedIds.includes(parsed.deleted_id)) deletedIds.push(parsed.deleted_id);          }          if (parsed && Array.isArray(parsed.deleted_listing_ids)) {            parsed.deleted_listing_ids.forEach(function(dId) {              if (dId && !deletedIds.includes(dId)) deletedIds.push(dId);            });          }        } catch(e) {}      });      try { localStorage.setItem("deleted_listing_ids", JSON.stringify(deletedIds)); } catch(e) {}    }  } catch(err) {}  try{    const{data:e,error:t}=await L.from("listings").select("*, category:categories(*), location:locations(*)").neq("status","deleted").order("created_at",{ascending:!1});    if(!t&&e&&e.length>0) list=e;  }catch(err){}  if(!list||list.length===0){    try{      const{data:e2}=await L.from("listings").select("*").neq("status","deleted").order("created_at",{ascending:!1});      if(e2&&e2.length>0) list=e2;    }catch(err2){}  }  try{    const saved=JSON.parse(localStorage.getItem("user_custom_listings")||"[]");    if(saved&&saved.length>0){      saved.forEach(function(sItem) {        if (!list.some(function(item) { return item.id === sItem.id; })) {          list.push(sItem);        }      });    }  }catch(err){}  list = list.filter(function(item) {    return item && !String(item.title || "").startsWith("[SYS_") && item.title !== "[SYS_APP_CONFIG]" && item.title !== "SYS_APP_CONFIG" && item.status !== "deleted" && !deletedIds.includes(item.id);  });  return list.map(function(item) {    if (overrides[item.id]) {      return Object.assign({}, item, overrides[item.id]);    }    return item;  });}
+async function Gp(){  let list=[];  let deletedIds = [];  let overrides = {};  try { deletedIds = JSON.parse(localStorage.getItem("deleted_listing_ids") || "[]"); } catch(err) {}  try { overrides = JSON.parse(localStorage.getItem("listing_status_overrides") || "{}"); } catch(err) {}  try {    const { data: sysRows } = await L.from("listings").select("title, description").in("title", ["[SYS_DELETED_LISTING]", "[SYS_APP_CONFIG]"]).order("created_at", { ascending: false }).limit(200);    if (sysRows && Array.isArray(sysRows)) {      sysRows.forEach(function(row) {        if (!row || !row.description) return;        try {          const parsed = JSON.parse(row.description);          if (row.title === "[SYS_DELETED_LISTING]" && parsed && parsed.deleted_id) {            if (!deletedIds.includes(parsed.deleted_id)) deletedIds.push(parsed.deleted_id);          }          if (parsed && Array.isArray(parsed.deleted_listing_ids)) {            parsed.deleted_listing_ids.forEach(function(dId) {              if (dId && !deletedIds.includes(dId)) deletedIds.push(dId);            });          }        } catch(e) {}      });      try { localStorage.setItem("deleted_listing_ids", JSON.stringify(deletedIds)); } catch(e) {}    }  } catch(err) {}  try{    const{data:e,error:t}=await L.from("listings").select("*, category:categories(*), location:locations(*)").neq("status","deleted").not("title","like","[SYS_%").not("title","like","SYS_%").order("created_at",{ascending:!1});    if(!t&&e&&e.length>0) list=e;  }catch(err){}  if(!list||list.length===0){    try{      const{data:e2}=await L.from("listings").select("*").neq("status","deleted").not("title","like","[SYS_%").not("title","like","SYS_%").order("created_at",{ascending:!1});      if(e2&&e2.length>0) list=e2;    }catch(err2){}  }  try{    const saved=JSON.parse(localStorage.getItem("user_custom_listings")||"[]");    if(saved&&saved.length>0){      saved.forEach(function(sItem) {        if (!list.some(function(item) { return item.id === sItem.id; })) {          list.push(sItem);        }      });    }  }catch(err){}  list = list.filter(function(item) {    return item && !String(item.title || "").startsWith("[SYS_") && item.title !== "[SYS_APP_CONFIG]" && item.title !== "SYS_APP_CONFIG" && item.status !== "deleted" && !deletedIds.includes(item.id);  });  return list.map(function(item) {    if (overrides[item.id]) {      return Object.assign({}, item, overrides[item.id]);    }    return item;  });}
 const DEFAULT_RECHARGE_REQUESTS = [
   {
     id: "req_top_pro_pending_1",
