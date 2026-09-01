@@ -97,9 +97,9 @@ Option 2: Install and provide the "ws" package:
 \r=`.split(""),Ox=(()=>{const e=new Array(128);for(let t=0;t<e.length;t+=1)e[t]=-1;for(let t=0;t<od.length;t+=1)e[od[t].charCodeAt(0)]=-2;for(let t=0;t<ea.length;t+=1)e[ea[t].charCodeAt(0)]=t;return e})();function cd(e,t,n){if(e!==null)for(t.queue=t.queue<<8|e,t.queuedBits+=8;t.queuedBits>=6;){const r=t.queue>>t.queuedBits-6&63;n(ea[r]),t.queuedBits-=6}else if(t.queuedBits>0)for(t.queue=t.queue<<6-t.queuedBits,t.queuedBits=6;t.queuedBits>=6;){const r=t.queue>>t.queuedBits-6&63;n(ea[r]),t.queuedBits-=6}}function Cp(e,t,n){const r=Ox[e];if(r>-1)for(t.queue=t.queue<<6|r,t.queuedBits+=6;t.queuedBits>=8;)n(t.queue>>t.queuedBits-8&255),t.queuedBits-=8;else{if(r===-2)return;throw new Error(`Invalid Base64-URL character "${String.fromCharCode(e)}"`)}}function ud(e){const t=[],n=l=>{t.push(String.fromCodePoint(l))},r={utf8seq:0,codepoint:0},s={queue:0,queuedBits:0},i=l=>{Ix(l,r,n)};for(let l=0;l<e.length;l+=1)Cp(e.charCodeAt(l),s,i);return t.join("")}function Ax(e,t){if(e<=127){t(e);return}else if(e<=2047){t(192|e>>6),t(128|e&63);return}else if(e<=65535){t(224|e>>12),t(128|e>>6&63),t(128|e&63);return}else if(e<=1114111){t(240|e>>18),t(128|e>>12&63),t(128|e>>6&63),t(128|e&63);return}throw new Error(`Unrecognized Unicode codepoint: ${e.toString(16)}`)}function $x(e,t){for(let n=0;n<e.length;n+=1){let r=e.charCodeAt(n);if(r>55295&&r<=56319){const s=(r-55296)*1024&65535;r=(e.charCodeAt(n+1)-56320&65535|s)+65536,n+=1}Ax(r,t)}}function Ix(e,t,n){if(t.utf8seq===0){if(e<=127){n(e);return}for(let r=1;r<6;r+=1)if(!(e>>7-r&1)){t.utf8seq=r;break}if(t.utf8seq===2)t.codepoint=e&31;else if(t.utf8seq===3)t.codepoint=e&15;else if(t.utf8seq===4)t.codepoint=e&7;else throw new Error("Invalid UTF-8 sequence");t.utf8seq-=1}else if(t.utf8seq>0){if(e<=127)throw new Error("Invalid UTF-8 sequence");t.codepoint=t.codepoint<<6|e&63,t.utf8seq-=1,t.utf8seq===0&&n(t.codepoint)}}function Dx(e){const t=[],n={queue:0,queuedBits:0},r=s=>{t.push(s)};for(let s=0;s<e.length;s+=1)Cp(e.charCodeAt(s),n,r);return new Uint8Array(t)}function Ux(e){const t=[];return $x(e,n=>t.push(n)),new Uint8Array(t)}function Mx(e){const t=[],n={queue:0,queuedBits:0},r=s=>{t.push(s)};return e.forEach(s=>cd(s,n,r)),cd(null,n,r),t.join("")}function Fx(e){return Math.round(Date.now()/1e3)+e}function zx(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){const t=Math.random()*16|0;return(e=="x"?t:t&3|8).toString(16)})}const lt=()=>typeof window<"u"&&typeof document<"u",yn={tested:!1,writable:!1},Ep=()=>{if(!lt())return!1;try{if(typeof globalThis.localStorage!="object")return!1}catch{return!1}if(yn.tested)return yn.writable;const e=`lswt-${Math.random()}${Math.random()}`;try{globalThis.localStorage.setItem(e,e),globalThis.localStorage.removeItem(e),yn.tested=!0,yn.writable=!0}catch{yn.tested=!0,yn.writable=!1}return yn.writable};function Bx(e){const t={},n=new URL(e);if(n.hash&&n.hash[0]==="#")try{new URLSearchParams(n.hash.substring(1)).forEach((s,i)=>{t[i]=s})}catch{}return n.searchParams.forEach((r,s)=>{t[s]=r}),t}const Pp=e=>{let t;return e?t=e:typeof fetch>"u"?t=(...n)=>Ms(async()=>{const{default:r}=await Promise.resolve().then(()=>Tr);return{default:r}},void 0).then(({default:r})=>r(...n)):t=fetch,(...n)=>t(...n)},Hx=e=>typeof e=="object"&&e!==null&&"status"in e&&"ok"in e&&"json"in e&&typeof e.json=="function",Gn=async(e,t,n)=>{await e.setItem(t,JSON.stringify(n))},vn=async(e,t)=>{const n=await e.getItem(t);if(!n)return null;try{return JSON.parse(n)}catch{return n}},Vt=async(e,t)=>{await e.removeItem(t)};class Na{constructor(){this.promise=new Na.promiseConstructor((t,n)=>{this.resolve=t,this.reject=n})}}Na.promiseConstructor=Promise;function cl(e){const t=e.split(".");if(t.length!==3)throw new vo("Invalid JWT structure");for(let r=0;r<t.length;r++)if(!Cx.test(t[r]))throw new vo("JWT not in base64url format");return{header:JSON.parse(ud(t[0])),payload:JSON.parse(ud(t[1])),signature:Dx(t[2]),raw:{header:t[0],payload:t[1]}}}async function Wx(e){return await new Promise(t=>{setTimeout(()=>t(null),e)})}function Vx(e,t){return new Promise((r,s)=>{(async()=>{for(let i=0;i<1/0;i++)try{const l=await e(i);if(!t(i,null,l)){r(l);return}}catch(l){if(!t(i,l)){s(l);return}}})()})}function qx(e){return("0"+e.toString(16)).substr(-2)}function Kx(){const t=new Uint32Array(56);if(typeof crypto>"u"){const n="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~",r=n.length;let s="";for(let i=0;i<56;i++)s+=n.charAt(Math.floor(Math.random()*r));return s}return crypto.getRandomValues(t),Array.from(t,qx).join("")}async function Gx(e){const n=new TextEncoder().encode(e),r=await crypto.subtle.digest("SHA-256",n),s=new Uint8Array(r);return Array.from(s).map(i=>String.fromCharCode(i)).join("")}async function Jx(e){if(!(typeof crypto<"u"&&typeof crypto.subtle<"u"&&typeof TextEncoder<"u"))return console.warn("WebCrypto API is not supported. Code challenge method will default to use plain instead of sha256."),e;const n=await Gx(e);return btoa(n).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}async function Bn(e,t,n=!1){const r=Kx();let s=r;n&&(s+="/PASSWORD_RECOVERY"),await Gn(e,`${t}-code-verifier`,s);const i=await Jx(r);return[i,r===i?"plain":"s256"]}const Qx=/^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])$/i;function Yx(e){const t=e.headers.get(go);if(!t||!t.match(Qx))return null;try{return new Date(`${t}T00:00:00.0Z`)}catch{return null}}function Xx(e){if(!e)throw new Error("Missing exp claim");const t=Math.floor(Date.now()/1e3);if(e<=t)throw new Error("JWT has expired")}function Zx(e){switch(e){case"RS256":return{name:"RSASSA-PKCS1-v1_5",hash:{name:"SHA-256"}};case"ES256":return{name:"ECDSA",namedCurve:"P-256",hash:{name:"SHA-256"}};default:throw new Error("Invalid alg claim")}}const ew=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;function Hn(e){if(!ew.test(e))throw new Error("@supabase/auth-js: Expected parameter to be UUID but is not")}function ul(){const e={};return new Proxy(e,{get:(t,n)=>{if(n==="__isUserNotAvailableProxy")return!0;if(typeof n=="symbol"){const r=n.toString();if(r==="Symbol(Symbol.toPrimitive)"||r==="Symbol(Symbol.toStringTag)"||r==="Symbol(util.inspect.custom)")return}throw new Error(`@supabase/auth-js: client was created with userStorage option and there was no user stored in the user storage. Accessing the "${n}" property of the session object is not supported. Please use getUser() instead.`)},set:(t,n)=>{throw new Error(`@supabase/auth-js: client was created with userStorage option and there was no user stored in the user storage. Setting the "${n}" property of the session object is not supported. Please use getUser() to fetch a user object you can manipulate.`)},deleteProperty:(t,n)=>{throw new Error(`@supabase/auth-js: client was created with userStorage option and there was no user stored in the user storage. Deleting the "${n}" property of the session object is not supported. Please use getUser() to fetch a user object you can manipulate.`)}})}function dd(e){return JSON.parse(JSON.stringify(e))}var tw=function(e,t){var n={};for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&t.indexOf(r)<0&&(n[r]=e[r]);if(e!=null&&typeof Object.getOwnPropertySymbols=="function")for(var s=0,r=Object.getOwnPropertySymbols(e);s<r.length;s++)t.indexOf(r[s])<0&&Object.prototype.propertyIsEnumerable.call(e,r[s])&&(n[r[s]]=e[r[s]]);return n};const jn=e=>e.msg||e.message||e.error_description||e.error||JSON.stringify(e),nw=[502,503,504];async function hd(e){var t;if(!Hx(e))throw new yo(jn(e),0);if(nw.includes(e.status))throw new yo(jn(e),e.status);let n;try{n=await e.json()}catch(i){throw new Np(jn(i),i)}let r;const s=Yx(e);if(s&&s.getTime()>=Sp["2024-01-01"].timestamp&&typeof n=="object"&&n&&typeof n.code=="string"?r=n.code:typeof n=="object"&&n&&typeof n.error_code=="string"&&(r=n.error_code),r){if(r==="weak_password")throw new ld(jn(n),e.status,((t=n.weak_password)===null||t===void 0?void 0:t.reasons)||[]);if(r==="session_not_found")throw new qt}else if(typeof n=="object"&&n&&typeof n.weak_password=="object"&&n.weak_password&&Array.isArray(n.weak_password.reasons)&&n.weak_password.reasons.length&&n.weak_password.reasons.reduce((i,l)=>i&&typeof l=="string",!0))throw new ld(jn(n),e.status,n.weak_password.reasons);throw new Px(jn(n),e.status||500,r)}const rw=(e,t,n,r)=>{const s={method:e,headers:(t==null?void 0:t.headers)||{}};return e==="GET"?s:(s.headers=Object.assign({"Content-Type":"application/json;charset=UTF-8"},t==null?void 0:t.headers),s.body=JSON.stringify(r),Object.assign(Object.assign({},s),n))};async function B(e,t,n,r){var s;const i=Object.assign({},r==null?void 0:r.headers);i[go]||(i[go]=Sp["2024-01-01"].name),r!=null&&r.jwt&&(i.Authorization=`Bearer ${r.jwt}`);const l=(s=r==null?void 0:r.query)!==null&&s!==void 0?s:{};r!=null&&r.redirectTo&&(l.redirect_to=r.redirectTo);const o=Object.keys(l).length?"?"+new URLSearchParams(l).toString():"",c=await sw(e,t,n+o,{headers:i,noResolveJson:r==null?void 0:r.noResolveJson},{},r==null?void 0:r.body);return r!=null&&r.xform?r==null?void 0:r.xform(c):{data:Object.assign({},c),error:null}}async function sw(e,t,n,r,s,i){const l=rw(t,r,s,i);let o;try{o=await e(n,Object.assign({},l))}catch(c){throw console.error(c),new yo(jn(c),0)}if(o.ok||await hd(o),r!=null&&r.noResolveJson)return o;try{return await o.json()}catch(c){await hd(c)}}function Rt(e){var t;let n=null;ow(e)&&(n=Object.assign({},e),e.expires_at||(n.expires_at=Fx(e.expires_in)));const r=(t=e.user)!==null&&t!==void 0?t:e;return{data:{session:n,user:r},error:null}}function fd(e){const t=Rt(e);return!t.error&&e.weak_password&&typeof e.weak_password=="object"&&Array.isArray(e.weak_password.reasons)&&e.weak_password.reasons.length&&e.weak_password.message&&typeof e.weak_password.message=="string"&&e.weak_password.reasons.reduce((n,r)=>n&&typeof r=="string",!0)&&(t.data.weak_password=e.weak_password),t}function Yt(e){var t;return{data:{user:(t=e.user)!==null&&t!==void 0?t:e},error:null}}function iw(e){return{data:e,error:null}}function aw(e){const{action_link:t,email_otp:n,hashed_token:r,redirect_to:s,verification_type:i}=e,l=tw(e,["action_link","email_otp","hashed_token","redirect_to","verification_type"]),o={action_link:t,email_otp:n,hashed_token:r,redirect_to:s,verification_type:i},c=Object.assign({},l);return{data:{properties:o,user:c},error:null}}function lw(e){return e}function ow(e){return e.access_token&&e.refresh_token&&e.expires_in}const dl=["global","local","others"];var cw=function(e,t){var n={};for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&t.indexOf(r)<0&&(n[r]=e[r]);if(e!=null&&typeof Object.getOwnPropertySymbols=="function")for(var s=0,r=Object.getOwnPropertySymbols(e);s<r.length;s++)t.indexOf(r[s])<0&&Object.prototype.propertyIsEnumerable.call(e,r[s])&&(n[r[s]]=e[r[s]]);return n};class uw{constructor({url:t="",headers:n={},fetch:r}){this.url=t,this.headers=n,this.fetch=Pp(r),this.mfa={listFactors:this._listFactors.bind(this),deleteFactor:this._deleteFactor.bind(this)}}async signOut(t,n=dl[0]){if(dl.indexOf(n)<0)throw new Error(`@supabase/auth-js: Parameter scope must be one of ${dl.join(", ")}`);try{return await B(this.fetch,"POST",`${this.url}/logout?scope=${n}`,{headers:this.headers,jwt:t,noResolveJson:!0}),{data:null,error:null}}catch(r){if(F(r))return{data:null,error:r};throw r}}async inviteUserByEmail(t,n={}){try{return await B(this.fetch,"POST",`${this.url}/invite`,{body:{email:t,data:n.data},headers:this.headers,redirectTo:n.redirectTo,xform:Yt})}catch(r){if(F(r))return{data:{user:null},error:r};throw r}}async generateLink(t){try{const{options:n}=t,r=cw(t,["options"]),s=Object.assign(Object.assign({},r),n);return"newEmail"in r&&(s.new_email=r==null?void 0:r.newEmail,delete s.newEmail),await B(this.fetch,"POST",`${this.url}/admin/generate_link`,{body:s,headers:this.headers,xform:aw,redirectTo:n==null?void 0:n.redirectTo})}catch(n){if(F(n))return{data:{properties:null,user:null},error:n};throw n}}async createUser(t){try{return await B(this.fetch,"POST",`${this.url}/admin/users`,{body:t,headers:this.headers,xform:Yt})}catch(n){if(F(n))return{data:{user:null},error:n};throw n}}async listUsers(t){var n,r,s,i,l,o,c;try{const u={nextPage:null,lastPage:0,total:0},d=await B(this.fetch,"GET",`${this.url}/admin/users`,{headers:this.headers,noResolveJson:!0,query:{page:(r=(n=t==null?void 0:t.page)===null||n===void 0?void 0:n.toString())!==null&&r!==void 0?r:"",per_page:(i=(s=t==null?void 0:t.perPage)===null||s===void 0?void 0:s.toString())!==null&&i!==void 0?i:""},xform:lw});if(d.error)throw d.error;const h=await d.json(),p=(l=d.headers.get("x-total-count"))!==null&&l!==void 0?l:0,v=(c=(o=d.headers.get("link"))===null||o===void 0?void 0:o.split(","))!==null&&c!==void 0?c:[];return v.length>0&&(v.forEach(x=>{const w=parseInt(x.split(";")[0].split("=")[1].substring(0,1)),j=JSON.parse(x.split(";")[1].split("=")[1]);u[`${j}Page`]=w}),u.total=parseInt(p)),{data:Object.assign(Object.assign({},h),u),error:null}}catch(u){if(F(u))return{data:{users:[]},error:u};throw u}}async getUserById(t){Hn(t);try{return await B(this.fetch,"GET",`${this.url}/admin/users/${t}`,{headers:this.headers,xform:Yt})}catch(n){if(F(n))return{data:{user:null},error:n};throw n}}async updateUserById(t,n){Hn(t);try{return await B(this.fetch,"PUT",`${this.url}/admin/users/${t}`,{body:n,headers:this.headers,xform:Yt})}catch(r){if(F(r))return{data:{user:null},error:r};throw r}}async deleteUser(t,n=!1){Hn(t);try{return await B(this.fetch,"DELETE",`${this.url}/admin/users/${t}`,{headers:this.headers,body:{should_soft_delete:n},xform:Yt})}catch(r){if(F(r))return{data:{user:null},error:r};throw r}}async _listFactors(t){Hn(t.userId);try{const{data:n,error:r}=await B(this.fetch,"GET",`${this.url}/admin/users/${t.userId}/factors`,{headers:this.headers,xform:s=>({data:{factors:s},error:null})});return{data:n,error:r}}catch(n){if(F(n))return{data:null,error:n};throw n}}async _deleteFactor(t){Hn(t.userId),Hn(t.id);try{return{data:await B(this.fetch,"DELETE",`${this.url}/admin/users/${t.userId}/factors/${t.id}`,{headers:this.headers}),error:null}}catch(n){if(F(n))return{data:null,error:n};throw n}}}function pd(e={}){return{getItem:t=>e[t]||null,setItem:(t,n)=>{e[t]=n},removeItem:t=>{delete e[t]}}}function dw(){if(typeof globalThis!="object")try{Object.defineProperty(Object.prototype,"__magic__",{get:function(){return this},configurable:!0}),__magic__.globalThis=__magic__,delete Object.prototype.__magic__}catch{typeof self<"u"&&(self.globalThis=self)}}const Wn={debug:!!(globalThis&&Ep()&&globalThis.localStorage&&globalThis.localStorage.getItem("supabase.gotrue-js.locks.debug")==="true")};class Rp extends Error{constructor(t){super(t),this.isAcquireTimeout=!0}}class hw extends Rp{}async function fw(e,t,n){Wn.debug&&console.log("@supabase/gotrue-js: navigatorLock: acquire lock",e,t);const r=new globalThis.AbortController;return t>0&&setTimeout(()=>{r.abort(),Wn.debug&&console.log("@supabase/gotrue-js: navigatorLock acquire timed out",e)},t),await Promise.resolve().then(()=>globalThis.navigator.locks.request(e,t===0?{mode:"exclusive",ifAvailable:!0}:{mode:"exclusive",signal:r.signal},async s=>{if(s){Wn.debug&&console.log("@supabase/gotrue-js: navigatorLock: acquired",e,s.name);try{return await n()}finally{Wn.debug&&console.log("@supabase/gotrue-js: navigatorLock: released",e,s.name)}}else{if(t===0)throw Wn.debug&&console.log("@supabase/gotrue-js: navigatorLock: not immediately available",e),new hw(`Acquiring an exclusive Navigator LockManager lock "${e}" immediately failed`);if(Wn.debug)try{const i=await globalThis.navigator.locks.query();console.log("@supabase/gotrue-js: Navigator LockManager state",JSON.stringify(i,null,"  "))}catch(i){console.warn("@supabase/gotrue-js: Error when querying Navigator LockManager state",i)}return console.warn("@supabase/gotrue-js: Navigator LockManager returned a null lock when using #request without ifAvailable set to true, it appears this browser is not following the LockManager spec https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request"),await n()}}))}dw();const pw={url:kx,storageKey:Sx,autoRefreshToken:!0,persistSession:!0,detectSessionInUrl:!0,headers:Nx,flowType:"implicit",debug:!1,hasCustomAuthorizationHeader:!1};async function md(e,t,n){return await n()}const Vn={};class Es{constructor(t){var n,r;this.userStorage=null,this.memoryStorage=null,this.stateChangeEmitters=new Map,this.autoRefreshTicker=null,this.visibilityChangedCallback=null,this.refreshingDeferred=null,this.initializePromise=null,this.detectSessionInUrl=!0,this.hasCustomAuthorizationHeader=!1,this.suppressGetSessionWarning=!1,this.lockAcquired=!1,this.pendingInLock=[],this.broadcastChannel=null,this.logger=console.log,this.instanceID=Es.nextInstanceID,Es.nextInstanceID+=1,this.instanceID>0&&lt()&&console.warn("Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.");const s=Object.assign(Object.assign({},pw),t);if(this.logDebugMessages=!!s.debug,typeof s.debug=="function"&&(this.logger=s.debug),this.persistSession=s.persistSession,this.storageKey=s.storageKey,this.autoRefreshToken=s.autoRefreshToken,this.admin=new uw({url:s.url,headers:s.headers,fetch:s.fetch}),this.url=s.url,this.headers=s.headers,this.fetch=Pp(s.fetch),this.lock=s.lock||md,this.detectSessionInUrl=s.detectSessionInUrl,this.flowType=s.flowType,this.hasCustomAuthorizationHeader=s.hasCustomAuthorizationHeader,s.lock?this.lock=s.lock:lt()&&(!((n=globalThis==null?void 0:globalThis.navigator)===null||n===void 0)&&n.locks)?this.lock=fw:this.lock=md,this.jwks||(this.jwks={keys:[]},this.jwks_cached_at=Number.MIN_SAFE_INTEGER),this.mfa={verify:this._verify.bind(this),enroll:this._enroll.bind(this),unenroll:this._unenroll.bind(this),challenge:this._challenge.bind(this),listFactors:this._listFactors.bind(this),challengeAndVerify:this._challengeAndVerify.bind(this),getAuthenticatorAssuranceLevel:this._getAuthenticatorAssuranceLevel.bind(this)},this.persistSession?(s.storage?this.storage=s.storage:Ep()?this.storage=globalThis.localStorage:(this.memoryStorage={},this.storage=pd(this.memoryStorage)),s.userStorage&&(this.userStorage=s.userStorage)):(this.memoryStorage={},this.storage=pd(this.memoryStorage)),lt()&&globalThis.BroadcastChannel&&this.persistSession&&this.storageKey){try{this.broadcastChannel=new globalThis.BroadcastChannel(this.storageKey)}catch(i){console.error("Failed to create a new BroadcastChannel, multi-tab state changes will not be available",i)}(r=this.broadcastChannel)===null||r===void 0||r.addEventListener("message",async i=>{this._debug("received broadcast notification from other tab or client",i),await this._notifyAllSubscribers(i.data.event,i.data.session,!1)})}this.initialize()}get jwks(){var t,n;return(n=(t=Vn[this.storageKey])===null||t===void 0?void 0:t.jwks)!==null&&n!==void 0?n:{keys:[]}}set jwks(t){Vn[this.storageKey]=Object.assign(Object.assign({},Vn[this.storageKey]),{jwks:t})}get jwks_cached_at(){var t,n;return(n=(t=Vn[this.storageKey])===null||t===void 0?void 0:t.cachedAt)!==null&&n!==void 0?n:Number.MIN_SAFE_INTEGER}set jwks_cached_at(t){Vn[this.storageKey]=Object.assign(Object.assign({},Vn[this.storageKey]),{cachedAt:t})}_debug(...t){return this.logDebugMessages&&this.logger(`GoTrueClient@${this.instanceID} (${kp}) ${new Date().toISOString()}`,...t),this}async initialize(){return this.initializePromise?await this.initializePromise:(this.initializePromise=(async()=>await this._acquireLock(-1,async()=>await this._initialize()))(),await this.initializePromise)}async _initialize(){var t;try{const n=Bx(window.location.href);let r="none";if(this._isImplicitGrantCallback(n)?r="implicit":await this._isPKCECallback(n)&&(r="pkce"),lt()&&this.detectSessionInUrl&&r!=="none"){const{data:s,error:i}=await this._getSessionFromURL(n,r);if(i){if(this._debug("#_initialize()","error detecting session from URL",i),Lx(i)){const c=(t=i.details)===null||t===void 0?void 0:t.code;if(c==="identity_already_exists"||c==="identity_not_found"||c==="single_identity_not_deletable")return{error:i}}return await this._removeSession(),{error:i}}const{session:l,redirectType:o}=s;return this._debug("#_initialize()","detected session in URL",l,"redirect type",o),await this._saveSession(l),setTimeout(async()=>{o==="recovery"?await this._notifyAllSubscribers("PASSWORD_RECOVERY",l):await this._notifyAllSubscribers("SIGNED_IN",l)},0),{error:null}}return await this._recoverAndRefresh(),{error:null}}catch(n){return F(n)?{error:n}:{error:new Np("Unexpected error during initialization",n)}}finally{await this._handleVisibilityChange(),this._debug("#_initialize()","end")}}async signInAnonymously(t){var n,r,s;try{const i=await B(this.fetch,"POST",`${this.url}/signup`,{headers:this.headers,body:{data:(r=(n=t==null?void 0:t.options)===null||n===void 0?void 0:n.data)!==null&&r!==void 0?r:{},gotrue_meta_security:{captcha_token:(s=t==null?void 0:t.options)===null||s===void 0?void 0:s.captchaToken}},xform:Rt}),{data:l,error:o}=i;if(o||!l)return{data:{user:null,session:null},error:o};const c=l.session,u=l.user;return l.session&&(await this._saveSession(l.session),await this._notifyAllSubscribers("SIGNED_IN",c)),{data:{user:u,session:c},error:null}}catch(i){if(F(i))return{data:{user:null,session:null},error:i};throw i}}async signUp(t){var n,r,s;try{let i;if("email"in t){const{email:d,password:h,options:p}=t;let v=null,x=null;this.flowType==="pkce"&&([v,x]=await Bn(this.storage,this.storageKey)),i=await B(this.fetch,"POST",`${this.url}/signup`,{headers:this.headers,redirectTo:p==null?void 0:p.emailRedirectTo,body:{email:d,password:h,data:(n=p==null?void 0:p.data)!==null&&n!==void 0?n:{},gotrue_meta_security:{captcha_token:p==null?void 0:p.captchaToken},code_challenge:v,code_challenge_method:x},xform:Rt})}else if("phone"in t){const{phone:d,password:h,options:p}=t;i=await B(this.fetch,"POST",`${this.url}/signup`,{headers:this.headers,body:{phone:d,password:h,data:(r=p==null?void 0:p.data)!==null&&r!==void 0?r:{},channel:(s=p==null?void 0:p.channel)!==null&&s!==void 0?s:"sms",gotrue_meta_security:{captcha_token:p==null?void 0:p.captchaToken}},xform:Rt})}else throw new oi("You must provide either an email or phone number and a password");const{data:l,error:o}=i;if(o||!l)return{data:{user:null,session:null},error:o};const c=l.session,u=l.user;return l.session&&(await this._saveSession(l.session),await this._notifyAllSubscribers("SIGNED_IN",c)),{data:{user:u,session:c},error:null}}catch(i){if(F(i))return{data:{user:null,session:null},error:i};throw i}}async signInWithPassword(t){try{let n;if("email"in t){const{email:i,password:l,options:o}=t;n=await B(this.fetch,"POST",`${this.url}/token?grant_type=password`,{headers:this.headers,body:{email:i,password:l,gotrue_meta_security:{captcha_token:o==null?void 0:o.captchaToken}},xform:fd})}else if("phone"in t){const{phone:i,password:l,options:o}=t;n=await B(this.fetch,"POST",`${this.url}/token?grant_type=password`,{headers:this.headers,body:{phone:i,password:l,gotrue_meta_security:{captcha_token:o==null?void 0:o.captchaToken}},xform:fd})}else throw new oi("You must provide either an email or phone number and a password");const{data:r,error:s}=n;return s?{data:{user:null,session:null},error:s}:!r||!r.session||!r.user?{data:{user:null,session:null},error:new li}:(r.session&&(await this._saveSession(r.session),await this._notifyAllSubscribers("SIGNED_IN",r.session)),{data:Object.assign({user:r.user,session:r.session},r.weak_password?{weakPassword:r.weak_password}:null),error:s})}catch(n){if(F(n))return{data:{user:null,session:null},error:n};throw n}}async signInWithOAuth(t){var n,r,s,i;return await this._handleProviderSignIn(t.provider,{redirectTo:(n=t.options)===null||n===void 0?void 0:n.redirectTo,scopes:(r=t.options)===null||r===void 0?void 0:r.scopes,queryParams:(s=t.options)===null||s===void 0?void 0:s.queryParams,skipBrowserRedirect:(i=t.options)===null||i===void 0?void 0:i.skipBrowserRedirect})}async exchangeCodeForSession(t){return await this.initializePromise,this._acquireLock(-1,async()=>this._exchangeCodeForSession(t))}async signInWithWeb3(t){const{chain:n}=t;if(n==="solana")return await this.signInWithSolana(t);throw new Error(`@supabase/auth-js: Unsupported chain "${n}"`)}async signInWithSolana(t){var n,r,s,i,l,o,c,u,d,h,p,v;let x,w;if("message"in t)x=t.message,w=t.signature;else{const{chain:j,wallet:f,statement:g,options:y}=t;let _;if(lt())if(typeof f=="object")_=f;else{const S=window;if("solana"in S&&typeof S.solana=="object"&&("signIn"in S.solana&&typeof S.solana.signIn=="function"||"signMessage"in S.solana&&typeof S.solana.signMessage=="function"))_=S.solana;else throw new Error("@supabase/auth-js: No compatible Solana wallet interface on the window object (window.solana) detected. Make sure the user already has a wallet installed and connected for this app. Prefer passing the wallet interface object directly to signInWithWeb3({ chain: 'solana', wallet: resolvedUserWallet }) instead.")}else{if(typeof f!="object"||!(y!=null&&y.url))throw new Error("@supabase/auth-js: Both wallet and url must be specified in non-browser environments.");_=f}const k=new URL((n=y==null?void 0:y.url)!==null&&n!==void 0?n:window.location.href);if("signIn"in _&&_.signIn){const S=await _.signIn(Object.assign(Object.assign(Object.assign({issuedAt:new Date().toISOString()},y==null?void 0:y.signInWithSolana),{version:"1",domain:k.host,uri:k.href}),g?{statement:g}:null));let b;if(Array.isArray(S)&&S[0]&&typeof S[0]=="object")b=S[0];else if(S&&typeof S=="object"&&"signedMessage"in S&&"signature"in S)b=S;else throw new Error("@supabase/auth-js: Wallet method signIn() returned unrecognized value");if("signedMessage"in b&&"signature"in b&&(typeof b.signedMessage=="string"||b.signedMessage instanceof Uint8Array)&&b.signature instanceof Uint8Array)x=typeof b.signedMessage=="string"?b.signedMessage:new TextDecoder().decode(b.signedMessage),w=b.signature;else throw new Error("@supabase/auth-js: Wallet method signIn() API returned object without signedMessage and signature fields")}else{if(!("signMessage"in _)||typeof _.signMessage!="function"||!("publicKey"in _)||typeof _!="object"||!_.publicKey||!("toBase58"in _.publicKey)||typeof _.publicKey.toBase58!="function")throw new Error("@supabase/auth-js: Wallet does not have a compatible signMessage() and publicKey.toBase58() API");x=[`${k.host} wants you to sign in with your Solana account:`,_.publicKey.toBase58(),...g?["",g,""]:[""],"Version: 1",`URI: ${k.href}`,`Issued At: ${(s=(r=y==null?void 0:y.signInWithSolana)===null||r===void 0?void 0:r.issuedAt)!==null&&s!==void 0?s:new Date().toISOString()}`,...!((i=y==null?void 0:y.signInWithSolana)===null||i===void 0)&&i.notBefore?[`Not Before: ${y.signInWithSolana.notBefore}`]:[],...!((l=y==null?void 0:y.signInWithSolana)===null||l===void 0)&&l.expirationTime?[`Expiration Time: ${y.signInWithSolana.expirationTime}`]:[],...!((o=y==null?void 0:y.signInWithSolana)===null||o===void 0)&&o.chainId?[`Chain ID: ${y.signInWithSolana.chainId}`]:[],...!((c=y==null?void 0:y.signInWithSolana)===null||c===void 0)&&c.nonce?[`Nonce: ${y.signInWithSolana.nonce}`]:[],...!((u=y==null?void 0:y.signInWithSolana)===null||u===void 0)&&u.requestId?[`Request ID: ${y.signInWithSolana.requestId}`]:[],...!((h=(d=y==null?void 0:y.signInWithSolana)===null||d===void 0?void 0:d.resources)===null||h===void 0)&&h.length?["Resources",...y.signInWithSolana.resources.map(b=>`- ${b}`)]:[]].join(`
 `);const S=await _.signMessage(new TextEncoder().encode(x),"utf8");if(!S||!(S instanceof Uint8Array))throw new Error("@supabase/auth-js: Wallet signMessage() API returned an recognized value");w=S}}try{const{data:j,error:f}=await B(this.fetch,"POST",`${this.url}/token?grant_type=web3`,{headers:this.headers,body:Object.assign({chain:"solana",message:x,signature:Mx(w)},!((p=t.options)===null||p===void 0)&&p.captchaToken?{gotrue_meta_security:{captcha_token:(v=t.options)===null||v===void 0?void 0:v.captchaToken}}:null),xform:Rt});if(f)throw f;return!j||!j.session||!j.user?{data:{user:null,session:null},error:new li}:(j.session&&(await this._saveSession(j.session),await this._notifyAllSubscribers("SIGNED_IN",j.session)),{data:Object.assign({},j),error:f})}catch(j){if(F(j))return{data:{user:null,session:null},error:j};throw j}}async _exchangeCodeForSession(t){const n=await vn(this.storage,`${this.storageKey}-code-verifier`),[r,s]=(n??"").split("/");try{const{data:i,error:l}=await B(this.fetch,"POST",`${this.url}/token?grant_type=pkce`,{headers:this.headers,body:{auth_code:t,code_verifier:r},xform:Rt});if(await Vt(this.storage,`${this.storageKey}-code-verifier`),l)throw l;return!i||!i.session||!i.user?{data:{user:null,session:null,redirectType:null},error:new li}:(i.session&&(await this._saveSession(i.session),await this._notifyAllSubscribers("SIGNED_IN",i.session)),{data:Object.assign(Object.assign({},i),{redirectType:s??null}),error:l})}catch(i){if(F(i))return{data:{user:null,session:null,redirectType:null},error:i};throw i}}async signInWithIdToken(t){try{const{options:n,provider:r,token:s,access_token:i,nonce:l}=t,o=await B(this.fetch,"POST",`${this.url}/token?grant_type=id_token`,{headers:this.headers,body:{provider:r,id_token:s,access_token:i,nonce:l,gotrue_meta_security:{captcha_token:n==null?void 0:n.captchaToken}},xform:Rt}),{data:c,error:u}=o;return u?{data:{user:null,session:null},error:u}:!c||!c.session||!c.user?{data:{user:null,session:null},error:new li}:(c.session&&(await this._saveSession(c.session),await this._notifyAllSubscribers("SIGNED_IN",c.session)),{data:c,error:u})}catch(n){if(F(n))return{data:{user:null,session:null},error:n};throw n}}async signInWithOtp(t){var n,r,s,i,l;try{if("email"in t){const{email:o,options:c}=t;let u=null,d=null;this.flowType==="pkce"&&([u,d]=await Bn(this.storage,this.storageKey));const{error:h}=await B(this.fetch,"POST",`${this.url}/otp`,{headers:this.headers,body:{email:o,data:(n=c==null?void 0:c.data)!==null&&n!==void 0?n:{},create_user:(r=c==null?void 0:c.shouldCreateUser)!==null&&r!==void 0?r:!0,gotrue_meta_security:{captcha_token:c==null?void 0:c.captchaToken},code_challenge:u,code_challenge_method:d},redirectTo:c==null?void 0:c.emailRedirectTo});return{data:{user:null,session:null},error:h}}if("phone"in t){const{phone:o,options:c}=t,{data:u,error:d}=await B(this.fetch,"POST",`${this.url}/otp`,{headers:this.headers,body:{phone:o,data:(s=c==null?void 0:c.data)!==null&&s!==void 0?s:{},create_user:(i=c==null?void 0:c.shouldCreateUser)!==null&&i!==void 0?i:!0,gotrue_meta_security:{captcha_token:c==null?void 0:c.captchaToken},channel:(l=c==null?void 0:c.channel)!==null&&l!==void 0?l:"sms"}});return{data:{user:null,session:null,messageId:u==null?void 0:u.message_id},error:d}}throw new oi("You must provide either an email or phone number.")}catch(o){if(F(o))return{data:{user:null,session:null},error:o};throw o}}async verifyOtp(t){var n,r;try{let s,i;"options"in t&&(s=(n=t.options)===null||n===void 0?void 0:n.redirectTo,i=(r=t.options)===null||r===void 0?void 0:r.captchaToken);const{data:l,error:o}=await B(this.fetch,"POST",`${this.url}/verify`,{headers:this.headers,body:Object.assign(Object.assign({},t),{gotrue_meta_security:{captcha_token:i}}),redirectTo:s,xform:Rt});if(o)throw o;if(!l)throw new Error("An error occurred on token verification.");const c=l.session,u=l.user;return c!=null&&c.access_token&&(await this._saveSession(c),await this._notifyAllSubscribers(t.type=="recovery"?"PASSWORD_RECOVERY":"SIGNED_IN",c)),{data:{user:u,session:c},error:null}}catch(s){if(F(s))return{data:{user:null,session:null},error:s};throw s}}async signInWithSSO(t){var n,r,s;try{let i=null,l=null;return this.flowType==="pkce"&&([i,l]=await Bn(this.storage,this.storageKey)),await B(this.fetch,"POST",`${this.url}/sso`,{body:Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({},"providerId"in t?{provider_id:t.providerId}:null),"domain"in t?{domain:t.domain}:null),{redirect_to:(r=(n=t.options)===null||n===void 0?void 0:n.redirectTo)!==null&&r!==void 0?r:void 0}),!((s=t==null?void 0:t.options)===null||s===void 0)&&s.captchaToken?{gotrue_meta_security:{captcha_token:t.options.captchaToken}}:null),{skip_http_redirect:!0,code_challenge:i,code_challenge_method:l}),headers:this.headers,xform:iw})}catch(i){if(F(i))return{data:null,error:i};throw i}}async reauthenticate(){return await this.initializePromise,await this._acquireLock(-1,async()=>await this._reauthenticate())}async _reauthenticate(){try{return await this._useSession(async t=>{const{data:{session:n},error:r}=t;if(r)throw r;if(!n)throw new qt;const{error:s}=await B(this.fetch,"GET",`${this.url}/reauthenticate`,{headers:this.headers,jwt:n.access_token});return{data:{user:null,session:null},error:s}})}catch(t){if(F(t))return{data:{user:null,session:null},error:t};throw t}}async resend(t){try{const n=`${this.url}/resend`;if("email"in t){const{email:r,type:s,options:i}=t,{error:l}=await B(this.fetch,"POST",n,{headers:this.headers,body:{email:r,type:s,gotrue_meta_security:{captcha_token:i==null?void 0:i.captchaToken}},redirectTo:i==null?void 0:i.emailRedirectTo});return{data:{user:null,session:null},error:l}}else if("phone"in t){const{phone:r,type:s,options:i}=t,{data:l,error:o}=await B(this.fetch,"POST",n,{headers:this.headers,body:{phone:r,type:s,gotrue_meta_security:{captcha_token:i==null?void 0:i.captchaToken}}});return{data:{user:null,session:null,messageId:l==null?void 0:l.message_id},error:o}}throw new oi("You must provide either an email or phone number and a type")}catch(n){if(F(n))return{data:{user:null,session:null},error:n};throw n}}async getSession(){return await this.initializePromise,await this._acquireLock(-1,async()=>this._useSession(async n=>n))}async _acquireLock(t,n){this._debug("#_acquireLock","begin",t);try{if(this.lockAcquired){const r=this.pendingInLock.length?this.pendingInLock[this.pendingInLock.length-1]:Promise.resolve(),s=(async()=>(await r,await n()))();return this.pendingInLock.push((async()=>{try{await s}catch{}})()),s}return await this.lock(`lock:${this.storageKey}`,t,async()=>{this._debug("#_acquireLock","lock acquired for storage key",this.storageKey);try{this.lockAcquired=!0;const r=n();for(this.pendingInLock.push((async()=>{try{await r}catch{}})()),await r;this.pendingInLock.length;){const s=[...this.pendingInLock];await Promise.all(s),this.pendingInLock.splice(0,s.length)}return await r}finally{this._debug("#_acquireLock","lock released for storage key",this.storageKey),this.lockAcquired=!1}})}finally{this._debug("#_acquireLock","end")}}async _useSession(t){this._debug("#_useSession","begin");try{const n=await this.__loadSession();return await t(n)}finally{this._debug("#_useSession","end")}}async __loadSession(){this._debug("#__loadSession()","begin"),this.lockAcquired||this._debug("#__loadSession()","used outside of an acquired lock!",new Error().stack);try{let t=null;const n=await vn(this.storage,this.storageKey);if(this._debug("#getSession()","session from storage",n),n!==null&&(this._isValidSession(n)?t=n:(this._debug("#getSession()","session from storage is not valid"),await this._removeSession())),!t)return{data:{session:null},error:null};const r=t.expires_at?t.expires_at*1e3-Date.now()<ll:!1;if(this._debug("#__loadSession()",`session has${r?"":" not"} expired`,"expires_at",t.expires_at),!r){if(this.userStorage){const l=await vn(this.userStorage,this.storageKey+"-user");l!=null&&l.user?t.user=l.user:t.user=ul()}if(this.storage.isServer&&t.user){let l=this.suppressGetSessionWarning;t=new Proxy(t,{get:(c,u,d)=>(!l&&u==="user"&&(console.warn("Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server."),l=!0,this.suppressGetSessionWarning=!0),Reflect.get(c,u,d))})}return{data:{session:t},error:null}}const{session:s,error:i}=await this._callRefreshToken(t.refresh_token);return i?{data:{session:null},error:i}:{data:{session:s},error:null}}finally{this._debug("#__loadSession()","end")}}async getUser(t){return t?await this._getUser(t):(await this.initializePromise,await this._acquireLock(-1,async()=>await this._getUser()))}async _getUser(t){try{return t?await B(this.fetch,"GET",`${this.url}/user`,{headers:this.headers,jwt:t,xform:Yt}):await this._useSession(async n=>{var r,s,i;const{data:l,error:o}=n;if(o)throw o;return!(!((r=l.session)===null||r===void 0)&&r.access_token)&&!this.hasCustomAuthorizationHeader?{data:{user:null},error:new qt}:await B(this.fetch,"GET",`${this.url}/user`,{headers:this.headers,jwt:(i=(s=l.session)===null||s===void 0?void 0:s.access_token)!==null&&i!==void 0?i:void 0,xform:Yt})})}catch(n){if(F(n))return Tx(n)&&(await this._removeSession(),await Vt(this.storage,`${this.storageKey}-code-verifier`)),{data:{user:null},error:n};throw n}}async updateUser(t,n={}){return await this.initializePromise,await this._acquireLock(-1,async()=>await this._updateUser(t,n))}async _updateUser(t,n={}){try{return await this._useSession(async r=>{const{data:s,error:i}=r;if(i)throw i;if(!s.session)throw new qt;const l=s.session;let o=null,c=null;this.flowType==="pkce"&&t.email!=null&&([o,c]=await Bn(this.storage,this.storageKey));const{data:u,error:d}=await B(this.fetch,"PUT",`${this.url}/user`,{headers:this.headers,redirectTo:n==null?void 0:n.emailRedirectTo,body:Object.assign(Object.assign({},t),{code_challenge:o,code_challenge_method:c}),jwt:l.access_token,xform:Yt});if(d)throw d;return l.user=u.user,await this._saveSession(l),await this._notifyAllSubscribers("USER_UPDATED",l),{data:{user:l.user},error:null}})}catch(r){if(F(r))return{data:{user:null},error:r};throw r}}async setSession(t){return await this.initializePromise,await this._acquireLock(-1,async()=>await this._setSession(t))}async _setSession(t){try{if(!t.access_token||!t.refresh_token)throw new qt;const n=Date.now()/1e3;let r=n,s=!0,i=null;const{payload:l}=cl(t.access_token);if(l.exp&&(r=l.exp,s=r<=n),s){const{session:o,error:c}=await this._callRefreshToken(t.refresh_token);if(c)return{data:{user:null,session:null},error:c};if(!o)return{data:{user:null,session:null},error:null};i=o}else{const{data:o,error:c}=await this._getUser(t.access_token);if(c)throw c;i={access_token:t.access_token,refresh_token:t.refresh_token,user:o.user,token_type:"bearer",expires_in:r-n,expires_at:r},await this._saveSession(i),await this._notifyAllSubscribers("SIGNED_IN",i)}return{data:{user:i.user,session:i},error:null}}catch(n){if(F(n))return{data:{session:null,user:null},error:n};throw n}}async refreshSession(t){return await this.initializePromise,await this._acquireLock(-1,async()=>await this._refreshSession(t))}async _refreshSession(t){try{return await this._useSession(async n=>{var r;if(!t){const{data:l,error:o}=n;if(o)throw o;t=(r=l.session)!==null&&r!==void 0?r:void 0}if(!(t!=null&&t.refresh_token))throw new qt;const{session:s,error:i}=await this._callRefreshToken(t.refresh_token);return i?{data:{user:null,session:null},error:i}:s?{data:{user:s.user,session:s},error:null}:{data:{user:null,session:null},error:null}})}catch(n){if(F(n))return{data:{user:null,session:null},error:n};throw n}}async _getSessionFromURL(t,n){try{if(!lt())throw new ci("No browser detected.");if(t.error||t.error_description||t.error_code)throw new ci(t.error_description||"Error in URL with unspecified error_description",{error:t.error||"unspecified_error",code:t.error_code||"unspecified_code"});switch(n){case"implicit":if(this.flowType==="pkce")throw new ad("Not a valid PKCE flow url.");break;case"pkce":if(this.flowType==="implicit")throw new ci("Not a valid implicit grant flow url.");break;default:}if(n==="pkce"){if(this._debug("#_initialize()","begin","is PKCE flow",!0),!t.code)throw new ad("No code detected.");const{data:g,error:y}=await this._exchangeCodeForSession(t.code);if(y)throw y;const _=new URL(window.location.href);return _.searchParams.delete("code"),window.history.replaceState(window.history.state,"",_.toString()),{data:{session:g.session,redirectType:null},error:null}}const{provider_token:r,provider_refresh_token:s,access_token:i,refresh_token:l,expires_in:o,expires_at:c,token_type:u}=t;if(!i||!o||!l||!u)throw new ci("No session defined in URL");const d=Math.round(Date.now()/1e3),h=parseInt(o);let p=d+h;c&&(p=parseInt(c));const v=p-d;v*1e3<=Kn&&console.warn(`@supabase/gotrue-js: Session as retrieved from URL expires in ${v}s, should have been closer to ${h}s`);const x=p-h;d-x>=120?console.warn("@supabase/gotrue-js: Session as retrieved from URL was issued over 120s ago, URL could be stale",x,p,d):d-x<0&&console.warn("@supabase/gotrue-js: Session as retrieved from URL was issued in the future? Check the device clock for skew",x,p,d);const{data:w,error:j}=await this._getUser(i);if(j)throw j;const f={provider_token:r,provider_refresh_token:s,access_token:i,expires_in:h,expires_at:p,refresh_token:l,token_type:u,user:w.user};return window.location.hash="",this._debug("#_getSessionFromURL()","clearing window.location.hash"),{data:{session:f,redirectType:t.type},error:null}}catch(r){if(F(r))return{data:{session:null,redirectType:null},error:r};throw r}}_isImplicitGrantCallback(t){return!!(t.access_token||t.error_description)}async _isPKCECallback(t){const n=await vn(this.storage,`${this.storageKey}-code-verifier`);return!!(t.code&&n)}async signOut(t={scope:"global"}){return await this.initializePromise,await this._acquireLock(-1,async()=>await this._signOut(t))}async _signOut({scope:t}={scope:"global"}){return await this._useSession(async n=>{var r;const{data:s,error:i}=n;if(i)return{error:i};const l=(r=s.session)===null||r===void 0?void 0:r.access_token;if(l){const{error:o}=await this.admin.signOut(l,t);if(o&&!(Rx(o)&&(o.status===404||o.status===401||o.status===403)))return{error:o}}return t!=="others"&&(await this._removeSession(),await Vt(this.storage,`${this.storageKey}-code-verifier`)),{error:null}})}onAuthStateChange(t){const n=zx(),r={id:n,callback:t,unsubscribe:()=>{this._debug("#unsubscribe()","state change callback with id removed",n),this.stateChangeEmitters.delete(n)}};return this._debug("#onAuthStateChange()","registered callback with id",n),this.stateChangeEmitters.set(n,r),(async()=>(await this.initializePromise,await this._acquireLock(-1,async()=>{this._emitInitialSession(n)})))(),{data:{subscription:r}}}async _emitInitialSession(t){return await this._useSession(async n=>{var r,s;try{const{data:{session:i},error:l}=n;if(l)throw l;await((r=this.stateChangeEmitters.get(t))===null||r===void 0?void 0:r.callback("INITIAL_SESSION",i)),this._debug("INITIAL_SESSION","callback id",t,"session",i)}catch(i){await((s=this.stateChangeEmitters.get(t))===null||s===void 0?void 0:s.callback("INITIAL_SESSION",null)),this._debug("INITIAL_SESSION","callback id",t,"error",i),console.error(i)}})}async resetPasswordForEmail(t,n={}){let r=null,s=null;this.flowType==="pkce"&&([r,s]=await Bn(this.storage,this.storageKey,!0));try{return await B(this.fetch,"POST",`${this.url}/recover`,{body:{email:t,code_challenge:r,code_challenge_method:s,gotrue_meta_security:{captcha_token:n.captchaToken}},headers:this.headers,redirectTo:n.redirectTo})}catch(i){if(F(i))return{data:null,error:i};throw i}}async getUserIdentities(){var t;try{const{data:n,error:r}=await this.getUser();if(r)throw r;return{data:{identities:(t=n.user.identities)!==null&&t!==void 0?t:[]},error:null}}catch(n){if(F(n))return{data:null,error:n};throw n}}async linkIdentity(t){var n;try{const{data:r,error:s}=await this._useSession(async i=>{var l,o,c,u,d;const{data:h,error:p}=i;if(p)throw p;const v=await this._getUrlForProvider(`${this.url}/user/identities/authorize`,t.provider,{redirectTo:(l=t.options)===null||l===void 0?void 0:l.redirectTo,scopes:(o=t.options)===null||o===void 0?void 0:o.scopes,queryParams:(c=t.options)===null||c===void 0?void 0:c.queryParams,skipBrowserRedirect:!0});return await B(this.fetch,"GET",v,{headers:this.headers,jwt:(d=(u=h.session)===null||u===void 0?void 0:u.access_token)!==null&&d!==void 0?d:void 0})});if(s)throw s;return lt()&&!(!((n=t.options)===null||n===void 0)&&n.skipBrowserRedirect)&&window.location.assign(r==null?void 0:r.url),{data:{provider:t.provider,url:r==null?void 0:r.url},error:null}}catch(r){if(F(r))return{data:{provider:t.provider,url:null},error:r};throw r}}async unlinkIdentity(t){try{return await this._useSession(async n=>{var r,s;const{data:i,error:l}=n;if(l)throw l;return await B(this.fetch,"DELETE",`${this.url}/user/identities/${t.identity_id}`,{headers:this.headers,jwt:(s=(r=i.session)===null||r===void 0?void 0:r.access_token)!==null&&s!==void 0?s:void 0})})}catch(n){if(F(n))return{data:null,error:n};throw n}}async _refreshAccessToken(t){const n=`#_refreshAccessToken(${t.substring(0,5)}...)`;this._debug(n,"begin");try{const r=Date.now();return await Vx(async s=>(s>0&&await Wx(200*Math.pow(2,s-1)),this._debug(n,"refreshing attempt",s),await B(this.fetch,"POST",`${this.url}/token?grant_type=refresh_token`,{body:{refresh_token:t},headers:this.headers,xform:Rt})),(s,i)=>{const l=200*Math.pow(2,s);return i&&ol(i)&&Date.now()+l-r<Kn})}catch(r){if(this._debug(n,"error",r),F(r))return{data:{session:null,user:null},error:r};throw r}finally{this._debug(n,"end")}}_isValidSession(t){return typeof t=="object"&&t!==null&&"access_token"in t&&"refresh_token"in t&&"expires_at"in t}async _handleProviderSignIn(t,n){const r=await this._getUrlForProvider(`${this.url}/authorize`,t,{redirectTo:n.redirectTo,scopes:n.scopes,queryParams:n.queryParams});return this._debug("#_handleProviderSignIn()","provider",t,"options",n,"url",r),lt()&&!n.skipBrowserRedirect&&window.location.assign(r),{data:{provider:t,url:r},error:null}}async _recoverAndRefresh(){var t,n;const r="#_recoverAndRefresh()";this._debug(r,"begin");try{const s=await vn(this.storage,this.storageKey);if(s&&this.userStorage){let l=await vn(this.userStorage,this.storageKey+"-user");!this.storage.isServer&&Object.is(this.storage,this.userStorage)&&!l&&(l={user:s.user},await Gn(this.userStorage,this.storageKey+"-user",l)),s.user=(t=l==null?void 0:l.user)!==null&&t!==void 0?t:ul()}else if(s&&!s.user&&!s.user){const l=await vn(this.storage,this.storageKey+"-user");l&&(l!=null&&l.user)?(s.user=l.user,await Vt(this.storage,this.storageKey+"-user"),await Gn(this.storage,this.storageKey,s)):s.user=ul()}if(this._debug(r,"session from storage",s),!this._isValidSession(s)){this._debug(r,"session is not valid"),s!==null&&await this._removeSession();return}const i=((n=s.expires_at)!==null&&n!==void 0?n:1/0)*1e3-Date.now()<ll;if(this._debug(r,`session has${i?"":" not"} expired with margin of ${ll}s`),i){if(this.autoRefreshToken&&s.refresh_token){const{error:l}=await this._callRefreshToken(s.refresh_token);l&&(console.error(l),ol(l)||(this._debug(r,"refresh failed with a non-retryable error, removing the session",l),await this._removeSession()))}}else if(s.user&&s.user.__isUserNotAvailableProxy===!0)try{const{data:l,error:o}=await this._getUser(s.access_token);!o&&(l!=null&&l.user)?(s.user=l.user,await this._saveSession(s),await this._notifyAllSubscribers("SIGNED_IN",s)):this._debug(r,"could not get user data, skipping SIGNED_IN notification")}catch(l){console.error("Error getting user data:",l),this._debug(r,"error getting user data, skipping SIGNED_IN notification",l)}else await this._notifyAllSubscribers("SIGNED_IN",s)}catch(s){this._debug(r,"error",s),console.error(s);return}finally{this._debug(r,"end")}}async _callRefreshToken(t){var n,r;if(!t)throw new qt;if(this.refreshingDeferred)return this.refreshingDeferred.promise;const s=`#_callRefreshToken(${t.substring(0,5)}...)`;this._debug(s,"begin");try{this.refreshingDeferred=new Na;const{data:i,error:l}=await this._refreshAccessToken(t);if(l)throw l;if(!i.session)throw new qt;await this._saveSession(i.session),await this._notifyAllSubscribers("TOKEN_REFRESHED",i.session);const o={session:i.session,error:null};return this.refreshingDeferred.resolve(o),o}catch(i){if(this._debug(s,"error",i),F(i)){const l={session:null,error:i};return ol(i)||await this._removeSession(),(n=this.refreshingDeferred)===null||n===void 0||n.resolve(l),l}throw(r=this.refreshingDeferred)===null||r===void 0||r.reject(i),i}finally{this.refreshingDeferred=null,this._debug(s,"end")}}async _notifyAllSubscribers(t,n,r=!0){const s=`#_notifyAllSubscribers(${t})`;this._debug(s,"begin",n,`broadcast = ${r}`);try{this.broadcastChannel&&r&&this.broadcastChannel.postMessage({event:t,session:n});const i=[],l=Array.from(this.stateChangeEmitters.values()).map(async o=>{try{await o.callback(t,n)}catch(c){i.push(c)}});if(await Promise.all(l),i.length>0){for(let o=0;o<i.length;o+=1)console.error(i[o]);throw i[0]}}finally{this._debug(s,"end")}}async _saveSession(t){this._debug("#_saveSession()",t),this.suppressGetSessionWarning=!0;const n=Object.assign({},t),r=n.user&&n.user.__isUserNotAvailableProxy===!0;if(this.userStorage){!r&&n.user&&await Gn(this.userStorage,this.storageKey+"-user",{user:n.user});const s=Object.assign({},n);delete s.user;const i=dd(s);await Gn(this.storage,this.storageKey,i)}else{const s=dd(n);await Gn(this.storage,this.storageKey,s)}}async _removeSession(){this._debug("#_removeSession()"),await Vt(this.storage,this.storageKey),await Vt(this.storage,this.storageKey+"-code-verifier"),await Vt(this.storage,this.storageKey+"-user"),this.userStorage&&await Vt(this.userStorage,this.storageKey+"-user"),await this._notifyAllSubscribers("SIGNED_OUT",null)}_removeVisibilityChangedCallback(){this._debug("#_removeVisibilityChangedCallback()");const t=this.visibilityChangedCallback;this.visibilityChangedCallback=null;try{t&&lt()&&(window!=null&&window.removeEventListener)&&window.removeEventListener("visibilitychange",t)}catch(n){console.error("removing visibilitychange callback failed",n)}}async _startAutoRefresh(){await this._stopAutoRefresh(),this._debug("#_startAutoRefresh()");const t=setInterval(()=>this._autoRefreshTokenTick(),Kn);this.autoRefreshTicker=t,t&&typeof t=="object"&&typeof t.unref=="function"?t.unref():typeof Deno<"u"&&typeof Deno.unrefTimer=="function"&&Deno.unrefTimer(t),setTimeout(async()=>{await this.initializePromise,await this._autoRefreshTokenTick()},0)}async _stopAutoRefresh(){this._debug("#_stopAutoRefresh()");const t=this.autoRefreshTicker;this.autoRefreshTicker=null,t&&clearInterval(t)}async startAutoRefresh(){this._removeVisibilityChangedCallback(),await this._startAutoRefresh()}async stopAutoRefresh(){this._removeVisibilityChangedCallback(),await this._stopAutoRefresh()}async _autoRefreshTokenTick(){this._debug("#_autoRefreshTokenTick()","begin");try{await this._acquireLock(0,async()=>{try{const t=Date.now();try{return await this._useSession(async n=>{const{data:{session:r}}=n;if(!r||!r.refresh_token||!r.expires_at){this._debug("#_autoRefreshTokenTick()","no session");return}const s=Math.floor((r.expires_at*1e3-t)/Kn);this._debug("#_autoRefreshTokenTick()",`access token expires in ${s} ticks, a tick lasts ${Kn}ms, refresh threshold is ${mo} ticks`),s<=mo&&await this._callRefreshToken(r.refresh_token)})}catch(n){console.error("Auto refresh tick failed with error. This is likely a transient error.",n)}}finally{this._debug("#_autoRefreshTokenTick()","end")}})}catch(t){if(t.isAcquireTimeout||t instanceof Rp)this._debug("auto refresh token tick lock not available");else throw t}}async _handleVisibilityChange(){if(this._debug("#_handleVisibilityChange()"),!lt()||!(window!=null&&window.addEventListener))return this.autoRefreshToken&&this.startAutoRefresh(),!1;try{this.visibilityChangedCallback=async()=>await this._onVisibilityChanged(!1),window==null||window.addEventListener("visibilitychange",this.visibilityChangedCallback),await this._onVisibilityChanged(!0)}catch(t){console.error("_handleVisibilityChange",t)}}async _onVisibilityChanged(t){const n=`#_onVisibilityChanged(${t})`;this._debug(n,"visibilityState",document.visibilityState),document.visibilityState==="visible"?(this.autoRefreshToken&&this._startAutoRefresh(),t||(await this.initializePromise,await this._acquireLock(-1,async()=>{if(document.visibilityState!=="visible"){this._debug(n,"acquired the lock to recover the session, but the browser visibilityState is no longer visible, aborting");return}await this._recoverAndRefresh()}))):document.visibilityState==="hidden"&&this.autoRefreshToken&&this._stopAutoRefresh()}async _getUrlForProvider(t,n,r){const s=[`provider=${encodeURIComponent(n)}`];if(r!=null&&r.redirectTo&&s.push(`redirect_to=${encodeURIComponent(r.redirectTo)}`),r!=null&&r.scopes&&s.push(`scopes=${encodeURIComponent(r.scopes)}`),this.flowType==="pkce"){const[i,l]=await Bn(this.storage,this.storageKey),o=new URLSearchParams({code_challenge:`${encodeURIComponent(i)}`,code_challenge_method:`${encodeURIComponent(l)}`});s.push(o.toString())}if(r!=null&&r.queryParams){const i=new URLSearchParams(r.queryParams);s.push(i.toString())}return r!=null&&r.skipBrowserRedirect&&s.push(`skip_http_redirect=${r.skipBrowserRedirect}`),`${t}?${s.join("&")}`}async _unenroll(t){try{return await this._useSession(async n=>{var r;const{data:s,error:i}=n;return i?{data:null,error:i}:await B(this.fetch,"DELETE",`${this.url}/factors/${t.factorId}`,{headers:this.headers,jwt:(r=s==null?void 0:s.session)===null||r===void 0?void 0:r.access_token})})}catch(n){if(F(n))return{data:null,error:n};throw n}}async _enroll(t){try{return await this._useSession(async n=>{var r,s;const{data:i,error:l}=n;if(l)return{data:null,error:l};const o=Object.assign({friendly_name:t.friendlyName,factor_type:t.factorType},t.factorType==="phone"?{phone:t.phone}:{issuer:t.issuer}),{data:c,error:u}=await B(this.fetch,"POST",`${this.url}/factors`,{body:o,headers:this.headers,jwt:(r=i==null?void 0:i.session)===null||r===void 0?void 0:r.access_token});return u?{data:null,error:u}:(t.factorType==="totp"&&(!((s=c==null?void 0:c.totp)===null||s===void 0)&&s.qr_code)&&(c.totp.qr_code=`data:image/svg+xml;utf-8,${c.totp.qr_code}`),{data:c,error:null})})}catch(n){if(F(n))return{data:null,error:n};throw n}}async _verify(t){return this._acquireLock(-1,async()=>{try{return await this._useSession(async n=>{var r;const{data:s,error:i}=n;if(i)return{data:null,error:i};const{data:l,error:o}=await B(this.fetch,"POST",`${this.url}/factors/${t.factorId}/verify`,{body:{code:t.code,challenge_id:t.challengeId},headers:this.headers,jwt:(r=s==null?void 0:s.session)===null||r===void 0?void 0:r.access_token});return o?{data:null,error:o}:(await this._saveSession(Object.assign({expires_at:Math.round(Date.now()/1e3)+l.expires_in},l)),await this._notifyAllSubscribers("MFA_CHALLENGE_VERIFIED",l),{data:l,error:o})})}catch(n){if(F(n))return{data:null,error:n};throw n}})}async _challenge(t){return this._acquireLock(-1,async()=>{try{return await this._useSession(async n=>{var r;const{data:s,error:i}=n;return i?{data:null,error:i}:await B(this.fetch,"POST",`${this.url}/factors/${t.factorId}/challenge`,{body:{channel:t.channel},headers:this.headers,jwt:(r=s==null?void 0:s.session)===null||r===void 0?void 0:r.access_token})})}catch(n){if(F(n))return{data:null,error:n};throw n}})}async _challengeAndVerify(t){const{data:n,error:r}=await this._challenge({factorId:t.factorId});return r?{data:null,error:r}:await this._verify({factorId:t.factorId,challengeId:n.id,code:t.code})}async _listFactors(){const{data:{user:t},error:n}=await this.getUser();if(n)return{data:null,error:n};const r=(t==null?void 0:t.factors)||[],s=r.filter(l=>l.factor_type==="totp"&&l.status==="verified"),i=r.filter(l=>l.factor_type==="phone"&&l.status==="verified");return{data:{all:r,totp:s,phone:i},error:null}}async _getAuthenticatorAssuranceLevel(){return this._acquireLock(-1,async()=>await this._useSession(async t=>{var n,r;const{data:{session:s},error:i}=t;if(i)return{data:null,error:i};if(!s)return{data:{currentLevel:null,nextLevel:null,currentAuthenticationMethods:[]},error:null};const{payload:l}=cl(s.access_token);let o=null;l.aal&&(o=l.aal);let c=o;((r=(n=s.user.factors)===null||n===void 0?void 0:n.filter(h=>h.status==="verified"))!==null&&r!==void 0?r:[]).length>0&&(c="aal2");const d=l.amr||[];return{data:{currentLevel:o,nextLevel:c,currentAuthenticationMethods:d},error:null}}))}async fetchJwk(t,n={keys:[]}){let r=n.keys.find(o=>o.kid===t);if(r)return r;const s=Date.now();if(r=this.jwks.keys.find(o=>o.kid===t),r&&this.jwks_cached_at+Ex>s)return r;const{data:i,error:l}=await B(this.fetch,"GET",`${this.url}/.well-known/jwks.json`,{headers:this.headers});if(l)throw l;return!i.keys||i.keys.length===0||(this.jwks=i,this.jwks_cached_at=s,r=i.keys.find(o=>o.kid===t),!r)?null:r}async getClaims(t,n={}){try{let r=t;if(!r){const{data:v,error:x}=await this.getSession();if(x||!v.session)return{data:null,error:x};r=v.session.access_token}const{header:s,payload:i,signature:l,raw:{header:o,payload:c}}=cl(r);n!=null&&n.allowExpired||Xx(i.exp);const u=!s.alg||s.alg.startsWith("HS")||!s.kid||!("crypto"in globalThis&&"subtle"in globalThis.crypto)?null:await this.fetchJwk(s.kid,n!=null&&n.keys?{keys:n.keys}:n==null?void 0:n.jwks);if(!u){const{error:v}=await this.getUser(r);if(v)throw v;return{data:{claims:i,header:s,signature:l},error:null}}const d=Zx(s.alg),h=await crypto.subtle.importKey("jwk",u,d,!0,["verify"]);if(!await crypto.subtle.verify(d,h,l,Ux(`${o}.${c}`)))throw new vo("Invalid JWT signature");return{data:{claims:i,header:s,signature:l},error:null}}catch(r){if(F(r))return{data:null,error:r};throw r}}}Es.nextInstanceID=0;const mw=Es;class gw extends mw{constructor(t){super(t)}}var yw=function(e,t,n,r){function s(i){return i instanceof n?i:new n(function(l){l(i)})}return new(n||(n=Promise))(function(i,l){function o(d){try{u(r.next(d))}catch(h){l(h)}}function c(d){try{u(r.throw(d))}catch(h){l(h)}}function u(d){d.done?i(d.value):s(d.value).then(o,c)}u((r=r.apply(e,t||[])).next())})};class vw{constructor(t,n,r){var s,i,l;this.supabaseUrl=t,this.supabaseKey=n;const o=bx(t);if(!n)throw new Error("supabaseKey is required.");this.realtimeUrl=new URL("realtime/v1",o),this.realtimeUrl.protocol=this.realtimeUrl.protocol.replace("http","ws"),this.authUrl=new URL("auth/v1",o),this.storageUrl=new URL("storage/v1",o),this.functionsUrl=new URL("functions/v1",o);const c=`sb-${o.hostname.split(".")[0]}-auth-token`,u={db:fx,realtime:mx,auth:Object.assign(Object.assign({},px),{storageKey:c}),global:hx},d=_x(r??{},u);this.storageKey=(s=d.auth.storageKey)!==null&&s!==void 0?s:"",this.headers=(i=d.global.headers)!==null&&i!==void 0?i:{},d.accessToken?(this.accessToken=d.accessToken,this.auth=new Proxy({},{get:(h,p)=>{throw new Error(`@supabase/supabase-js: Supabase Client is configured with the accessToken option, accessing supabase.auth.${String(p)} is not possible`)}})):this.auth=this._initSupabaseAuthClient((l=d.auth)!==null&&l!==void 0?l:{},this.headers,d.global.fetch),this.fetch=xx(n,this._getAccessToken.bind(this),d.global.fetch),this.realtime=this._initRealtimeClient(Object.assign({headers:this.headers,accessToken:this._getAccessToken.bind(this)},d.realtime)),this.rest=new Ov(new URL("rest/v1",o).href,{headers:this.headers,schema:d.db.schema,fetch:this.fetch}),this.storage=new cx(this.storageUrl.href,this.headers,this.fetch,r==null?void 0:r.storage),d.accessToken||this._listenForAuthEvents()}get functions(){return new dv(this.functionsUrl.href,{headers:this.headers,customFetch:this.fetch})}from(t){return this.rest.from(t)}schema(t){return this.rest.schema(t)}rpc(t,n={},r={}){return this.rest.rpc(t,n,r)}channel(t,n={config:{}}){return this.realtime.channel(t,n)}getChannels(){return this.realtime.getChannels()}removeChannel(t){return this.realtime.removeChannel(t)}removeAllChannels(){return this.realtime.removeAllChannels()}_getAccessToken(){var t,n;return yw(this,void 0,void 0,function*(){if(this.accessToken)return yield this.accessToken();const{data:r}=yield this.auth.getSession();return(n=(t=r.session)===null||t===void 0?void 0:t.access_token)!==null&&n!==void 0?n:this.supabaseKey})}_initSupabaseAuthClient({autoRefreshToken:t,persistSession:n,detectSessionInUrl:r,storage:s,userStorage:i,storageKey:l,flowType:o,lock:c,debug:u},d,h){const p={Authorization:`Bearer ${this.supabaseKey}`,apikey:`${this.supabaseKey}`};return new gw({url:this.authUrl.href,headers:Object.assign(Object.assign({},p),d),storageKey:l,autoRefreshToken:t,persistSession:n,detectSessionInUrl:r,storage:s,userStorage:i,flowType:o,lock:c,debug:u,fetch:h,hasCustomAuthorizationHeader:Object.keys(this.headers).some(v=>v.toLowerCase()==="authorization")})}_initRealtimeClient(t){return new Qv(this.realtimeUrl.href,Object.assign(Object.assign({},t),{params:Object.assign({apikey:this.supabaseKey},t==null?void 0:t.params)}))}_listenForAuthEvents(){return this.auth.onAuthStateChange((n,r)=>{this._handleTokenChanged(n,"CLIENT",r==null?void 0:r.access_token)})}_handleTokenChanged(t,n,r){(t==="TOKEN_REFRESHED"||t==="SIGNED_IN")&&this.changedAccessToken!==r?this.changedAccessToken=r:t==="SIGNED_OUT"&&(this.realtime.setAuth(),n=="STORAGE"&&this.auth.signOut(),this.changedAccessToken=void 0)}}const xw=(e,t,n)=>new vw(e,t,n);function ww(){if(typeof window<"u"||typeof process>"u")return!1;const e=process.version;if(e==null)return!1;const t=e.match(/^v(\d+)\./);return t?parseInt(t[1],10)<=18:!1}ww()&&console.warn("⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217");const jw="https://haaatxxndggdfwizgmlo.supabase.co",_w="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhYWF0eHhuZGdnZGZ3aXpnbWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTgxOTYsImV4cCI6MjEwMjgzNDE5Nn0.bmYm6h1AMUXvle9fUv86MPKtJt5JLq5Z6VjXI8YtqZ0",L=xw(jw,_w,{auth:{persistSession:!0,autoRefreshToken:!0,detectSessionInUrl:!0}}),Tp=m.createContext(void 0);function isUserAdmin(e) {
   if (!e) return false;
-  const role = String(e.role || '').toLowerCase();
-  const email = String(e.email || (e.user && e.user.email) || (e.user_metadata && e.user_metadata.email) || '').toLowerCase().trim();
-  if (role === 'admin' || role === 'super_admin' || e.is_admin === true) return true;
+  const role = String(e.role || "").toLowerCase();
+  const email = String(e.email || (e.user && e.user.email) || (e.user_metadata && e.user_metadata.email) || "").toLowerCase().trim();
+  if (role === "admin" || role === "super_admin" || e.is_admin === true) return true;
   const adminEmails = [
     "silgrakmarak1309@gmail.com",
     "grejamarak@gmail.com",
@@ -107,36 +107,165 @@ Option 2: Install and provide the "ws" package:
   ];
   return adminEmails.includes(email);
 }
+
+function getDeviceFingerprint() {
+  if (typeof window === "undefined") return "dev_server";
+  let devId = "";
+  try {
+    devId = localStorage.getItem("mlb_permanent_device_id") || "";
+  } catch(e) {}
+  if (!devId) {
+    try {
+      const match = document.cookie.match(/(?:^|; )mlb_permanent_device_id=([^;]*)/);
+      if (match) devId = decodeURIComponent(match[1]);
+    } catch(e) {}
+  }
+  
+  const hwParts = [];
+  try {
+    hwParts.push(navigator.userAgent || "");
+    hwParts.push(navigator.platform || "");
+    hwParts.push(navigator.hardwareConcurrency || "");
+    hwParts.push(navigator.maxTouchPoints || "");
+    if (typeof screen !== "undefined") {
+      hwParts.push(screen.width + "x" + screen.height + "x" + (screen.colorDepth || 24) + "x" + (window.devicePixelRatio || 1));
+    }
+    if (typeof Intl !== "undefined" && Intl.DateTimeFormat) {
+      hwParts.push(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
+    }
+  } catch(e) {}
+
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = 200;
+    canvas.height = 40;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.textBaseline = "top";
+      ctx.font = "14px Arial, sans-serif";
+      ctx.fillStyle = "#ff6600";
+      ctx.fillRect(10, 5, 80, 25);
+      ctx.fillStyle = "#006699";
+      ctx.fillText("MeriLocalBazaar#Dev2026", 15, 10);
+      ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+      ctx.fillText("MeriLocalBazaar#Dev2026", 17, 12);
+      hwParts.push(canvas.toDataURL());
+    }
+  } catch(e) {}
+
+  const rawStr = hwParts.join("~~~");
+  let h1 = 0x811c9dc5, h2 = 0x1b34a64b;
+  for (let i = 0; i < rawStr.length; i++) {
+    const ch = rawStr.charCodeAt(i);
+    h1 = (h1 ^ ch) * 0x01000193 >>> 0;
+    h2 = (h2 ^ (ch << 1)) * 0x01000193 >>> 0;
+  }
+  const hwHash = "dev_" + Math.abs(h1).toString(36) + "_" + Math.abs(h2).toString(36);
+
+  if (!devId) {
+    devId = hwHash;
+  }
+  try {
+    localStorage.setItem("mlb_permanent_device_id", devId);
+    document.cookie = "mlb_permanent_device_id=" + encodeURIComponent(devId) + "; path=/; max-age=315360000; SameSite=Lax";
+  } catch(e) {}
+  return devId;
+}
+
+async function checkDeviceLoginAllowedAsync(email) {
+  if (!email) return { allowed: false, message: "Please enter a valid email address." };
+  const cleanEmail = String(email).toLowerCase().trim();
+  if (isUserAdmin({ email: cleanEmail })) {
+    return { allowed: true, isAdmin: true };
+  }
+  const devId = getDeviceFingerprint();
+  let boundEmail = "";
+  
+  // 1. Check local persistent storage
+  try {
+    boundEmail = localStorage.getItem("mlb_bound_device_" + devId) || localStorage.getItem("mlb_bound_device_email") || localStorage.getItem("mlb_device_registered_email") || "";
+    if (!boundEmail) {
+      const match = document.cookie.match(new RegExp("(?:^|; )mlb_bound_email=([^;]*)"));
+      if (match) boundEmail = decodeURIComponent(match[1]);
+    }
+    boundEmail = String(boundEmail).toLowerCase().trim();
+  } catch(e) {}
+
+  // 2. Query Firebase/Supabase backend cloud registry
+  try {
+    const { data: cData } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);
+    if (cData && cData[0] && cData[0].description) {
+      const cfg = JSON.parse(cData[0].description);
+      if (cfg && cfg.device_bindings && cfg.device_bindings[devId]) {
+        boundEmail = String(cfg.device_bindings[devId]).toLowerCase().trim();
+      }
+    }
+  } catch(e) {}
+
+  if (boundEmail && boundEmail !== cleanEmail) {
+    return {
+      allowed: false,
+      boundEmail: boundEmail,
+      message: "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device."
+    };
+  }
+  return { allowed: true, isAdmin: false, devId: devId };
+}
+
 function checkDeviceLoginAllowed(email) {
   if (!email) return { allowed: false, message: "Please enter a valid email address." };
   const cleanEmail = String(email).toLowerCase().trim();
   if (isUserAdmin({ email: cleanEmail })) {
     return { allowed: true, isAdmin: true };
   }
+  const devId = getDeviceFingerprint();
   let boundEmail = "";
   try {
-    boundEmail = localStorage.getItem("mlb_bound_device_email") || localStorage.getItem("mlb_device_registered_email") || "";
+    boundEmail = localStorage.getItem("mlb_bound_device_" + devId) || localStorage.getItem("mlb_bound_device_email") || localStorage.getItem("mlb_device_registered_email") || "";
     boundEmail = String(boundEmail).toLowerCase().trim();
   } catch(e) {}
   if (boundEmail && boundEmail !== cleanEmail) {
     return {
       allowed: false,
       boundEmail: boundEmail,
-      message: "Security Alert: This phone is linked to (" + boundEmail + "). Another Gmail ID cannot login on this phone."
+      message: "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device."
     };
   }
   return { allowed: true, isAdmin: false };
 }
-function bindDeviceEmail(email) {
+
+async function bindDeviceEmailAsync(email) {
   if (!email) return;
   const cleanEmail = String(email).toLowerCase().trim();
   if (isUserAdmin({ email: cleanEmail })) return;
+  const devId = getDeviceFingerprint();
+  
+  // 1. Save locally
   try {
+    localStorage.setItem("mlb_bound_device_" + devId, cleanEmail);
     localStorage.setItem("mlb_bound_device_email", cleanEmail);
     localStorage.setItem("mlb_device_registered_email", cleanEmail);
+    document.cookie = "mlb_bound_email=" + encodeURIComponent(cleanEmail) + "; path=/; max-age=315360000; SameSite=Lax";
+  } catch(e) {}
+
+  // 2. Save to Backend Database
+  try {
+    let currentBindings = {};
+    const { data: cData } = await L.from("listings").select("description").eq("title", "[SYS_APP_CONFIG]").order("created_at", { ascending: false }).limit(1);
+    if (cData && cData[0] && cData[0].description) {
+      const cfg = JSON.parse(cData[0].description);
+      if (cfg && cfg.device_bindings) currentBindings = cfg.device_bindings;
+    }
+    if (!currentBindings[devId] || currentBindings[devId] !== cleanEmail) {
+      currentBindings[devId] = cleanEmail;
+      await syncCloudConfig({ device_bindings: currentBindings });
+    }
   } catch(e) {}
 }
 
+function bindDeviceEmail(email) {
+  bindDeviceEmailAsync(email).catch(()=>{});
+}
 function bw({children:e}){
   const[t,n]=m.useState(null),
   [r,s]=m.useState(null),
@@ -2983,6 +3112,15 @@ function W1(){const{user:e,profile:t}=Ae(),n=he(),r=ke(),[s,i]=m.useState(""),[l
   x(!0);
   try{
     const cleanEmail = (targetEmail || "").toLowerCase().trim();
+    if (!isUserAdmin({ email: cleanEmail })) {
+      const devCheck = await checkDeviceLoginAllowedAsync(cleanEmail);
+      if (!devCheck.allowed) {
+        r.show(devCheck.message || "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device.", "error");
+        setShowGoogleModal(!1);
+        x(!1);
+        return;
+      }
+    }
     const gPass = "GoogleAuthPass_2026#Secure";
     let signInRes = await e(cleanEmail, gPass);
     if(signInRes && signInRes.error){
@@ -3005,14 +3143,26 @@ function W1(){const{user:e,profile:t}=Ae(),n=he(),r=ke(),[s,i]=m.useState(""),[l
         localStorage.setItem("admin_pro_overrides", JSON.stringify(pros));
       }catch(err){}
     }
-    if(!isAdmin){ bindDeviceEmail(cleanEmail); } r.show("Signed in as " + cleanEmail, "success");
+    if(!isAdmin){ await bindDeviceEmailAsync(cleanEmail); }
+    r.show("Signed in as " + cleanEmail, "success");
     setShowGoogleModal(!1);
     if(rf) await rf();
     const dest = isAdmin ? "/admin" : "/";
     setTimeout(() => s(dest), 300);
   }catch(err){
     console.error("Google sign in err", err);
+    const cleanEmail = (targetEmail || "").toLowerCase().trim();
+    if (!isUserAdmin({ email: cleanEmail })) {
+      const devCheck = await checkDeviceLoginAllowedAsync(cleanEmail);
+      if (!devCheck.allowed) {
+        r.show(devCheck.message || "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device.", "error");
+        setShowGoogleModal(!1);
+        x(!1);
+        return;
+      }
+    }
     const isAdmin = isUserAdmin({ email: targetEmail });
+    if (!isAdmin) { await bindDeviceEmailAsync(cleanEmail); }
     r.show("Signed in as " + targetEmail, "success");
     setShowGoogleModal(!1);
     const dest = isAdmin ? "/admin" : "/";
@@ -3020,8 +3170,7 @@ function W1(){const{user:e,profile:t}=Ae(),n=he(),r=ke(),[s,i]=m.useState(""),[l
   }finally{
     x(!1);
   }
-};
-const w=async j=>{
+};const w=async j=>{
   if(j.preventDefault(),x(!0),i==="forgot"){
     if(!vd(o)){r.show("Please enter a valid email","error"),x(!1);return}
     const{error:f}=await n(o);
@@ -3032,21 +3181,50 @@ const w=async j=>{
   if(u.length<6){r.show("Password must be at least 6 characters","error"),x(!1);return}
   if(i==="signup"){
     if(!h.trim()){r.show("Please enter your name","error"),x(!1);return}
+    if (!isUserAdmin({ email: o })) {
+      const devCheck = await checkDeviceLoginAllowedAsync(o);
+      if (!devCheck.allowed) {
+        r.show(devCheck.message || "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device.", "error");
+        x(!1);
+        return;
+      }
+    }
     const{error:f}=await t(o,u,h.trim());
-    x(!1),f?r.show(f,"error"):(r.show("Account created! Please sign in.","success"),l("signin"),d(""));
+    if(f){
+      r.show(f,"error");
+      x(!1);
+    } else {
+      if (!isUserAdmin({ email: o })) {
+        await bindDeviceEmailAsync(o);
+      }
+      r.show("Account created! Please sign in.","success");
+      l("signin");
+      d("");
+      x(!1);
+    }
   }else{
+    if (!isUserAdmin({ email: o })) {
+      const devCheck = await checkDeviceLoginAllowedAsync(o);
+      if (!devCheck.allowed) {
+        r.show(devCheck.message || "This device is already registered with another account. Only the registered Gmail/Email ID can be used on this device.", "error");
+        x(!1);
+        return;
+      }
+    }
     const{error:f}=await e(o,u);
     x(!1);
     if(f){
       r.show(f,"error");
     }else{
+      if (!isUserAdmin({ email: o })) {
+        await bindDeviceEmailAsync(o);
+      }
       r.show("Welcome back!","success");
       const dest = isUserAdmin({ email: o }) ? "/admin" : "/";
       s(dest);
     }
   }
-};
-const googleSvgIcon=a.jsx("svg",{className:"w-5 h-5",viewBox:"0 0 24 24",children:a.jsxs("g",{children:[a.jsx("path",{fill:"#4285F4",d:"M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"}),a.jsx("path",{fill:"#34A853",d:"M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z"}),a.jsx("path",{fill:"#FBBC05",d:"M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"}),a.jsx("path",{fill:"#EA4335",d:"M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"})]})});return a.jsxs("div",{className:"min-h-screen flex flex-col bg-gradient-to-b from-primary-50 to-white",children:[a.jsxs("div",{className:"flex-1 flex flex-col items-center justify-center px-4 py-8",children:[a.jsxs(St,{to:"/",className:"flex items-center gap-2 mb-8",children:[a.jsx("img",{src:APP_LOGO_SRC,onError:e=>{e.currentTarget.src=APP_LOGO_SRC},alt:"Meri Local Bazaar",className:"w-12 h-12 rounded-2xl object-contain shadow-sm"}),a.jsx("span",{className:"font-bold text-xl text-gray-900",children:"Meri Local Bazaar"})]}),a.jsxs("div",{className:"card w-full max-w-sm p-6 shadow-xl border border-gray-100",children:[i!=="forgot"&&a.jsxs("button",{type:"button",onClick:()=>setShowGoogleModal(!0),disabled:v,className:"w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-xl font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm mb-4 active:scale-[0.99]",children:[googleSvgIcon,a.jsx("span",{className:"font-semibold",children:"Continue with Google"})]}),i!=="forgot"&&a.jsxs("div",{className:"relative flex py-1 items-center mb-4",children:[a.jsx("div",{className:"flex-grow border-t border-gray-200"}),a.jsx("span",{className:"flex-shrink mx-3 text-gray-400 text-xs uppercase font-semibold",children:"Or continue with email"}),a.jsx("div",{className:"flex-grow border-t border-gray-200"})]}),a.jsxs("div",{className:"flex items-center gap-2 mb-6",children:[i==="forgot"&&a.jsx("button",{onClick:()=>l("signin"),className:"text-gray-400 hover:text-gray-600",children:a.jsx(gt,{className:"w-4 h-4"})}),a.jsxs("h1",{className:"text-lg font-bold text-gray-900",children:[i==="signin"&&"Sign In",i==="signup"&&"Create Account",i==="forgot"&&"Reset Password"]})]}),a.jsxs("form",{onSubmit:w,className:"space-y-4",children:[i==="signup"&&a.jsxs("div",{children:[a.jsx("label",{className:"label",children:"Full Name"}),a.jsxs("div",{className:"relative",children:[a.jsx(kr,{className:"w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"}),a.jsx("input",{type:"text",value:h,onChange:j=>p(j.target.value),placeholder:"Your name",className:"input pl-10"})]})]}),a.jsxs("div",{children:[a.jsx("label",{className:"label",children:"Email"}),a.jsxs("div",{className:"relative",children:[a.jsx($p,{className:"w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"}),a.jsx("input",{type:"email",value:o,onChange:j=>c(j.target.value),placeholder:"you@example.com",className:"input pl-10",autoComplete:"email"})]})]}),i!=="forgot"&&a.jsxs("div",{children:[a.jsx("label",{className:"label",children:"Password"}),a.jsxs("div",{className:"relative",children:[a.jsx(Fw,{className:"w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"}),a.jsx("input",{type:"password",value:u,onChange:j=>d(j.target.value),placeholder:"At least 6 characters",className:"input pl-10",autoComplete:i==="signin"?"current-password":"new-password"})]})]}),a.jsx("button",{type:"submit",disabled:v,className:"btn-primary w-full py-3",children:v?"Please wait...":i==="signin"?"Sign In":i==="signup"?"Create Account":"Send Reset Email"})]}),i==="signin"&&a.jsxs("div",{className:"mt-4 text-center space-y-2",children:[a.jsx("button",{onClick:()=>l("forgot"),className:"text-xs text-secondary-600 hover:underline",children:"Forgot password?"}),a.jsxs("p",{className:"text-sm text-gray-500",children:["Don't have an account?"," ",a.jsx("button",{onClick:()=>l("signup"),className:"text-primary-600 font-medium hover:underline",children:"Sign up"})]})]}),i==="signup"&&a.jsxs("p",{className:"mt-4 text-center text-sm text-gray-500",children:["Already have an account?"," ",a.jsx("button",{onClick:()=>l("signin"),className:"text-primary-600 font-medium hover:underline",children:"Sign in"})]})]})]}),showGoogleModal&&(()=>{
+};const googleSvgIcon=a.jsx("svg",{className:"w-5 h-5",viewBox:"0 0 24 24",children:a.jsxs("g",{children:[a.jsx("path",{fill:"#4285F4",d:"M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"}),a.jsx("path",{fill:"#34A853",d:"M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z"}),a.jsx("path",{fill:"#FBBC05",d:"M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"}),a.jsx("path",{fill:"#EA4335",d:"M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"})]})});return a.jsxs("div",{className:"min-h-screen flex flex-col bg-gradient-to-b from-primary-50 to-white",children:[a.jsxs("div",{className:"flex-1 flex flex-col items-center justify-center px-4 py-8",children:[a.jsxs(St,{to:"/",className:"flex items-center gap-2 mb-8",children:[a.jsx("img",{src:APP_LOGO_SRC,onError:e=>{e.currentTarget.src=APP_LOGO_SRC},alt:"Meri Local Bazaar",className:"w-12 h-12 rounded-2xl object-contain shadow-sm"}),a.jsx("span",{className:"font-bold text-xl text-gray-900",children:"Meri Local Bazaar"})]}),a.jsxs("div",{className:"card w-full max-w-sm p-6 shadow-xl border border-gray-100",children:[i!=="forgot"&&a.jsxs("button",{type:"button",onClick:()=>setShowGoogleModal(!0),disabled:v,className:"w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-xl font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm mb-4 active:scale-[0.99]",children:[googleSvgIcon,a.jsx("span",{className:"font-semibold",children:"Continue with Google"})]}),i!=="forgot"&&a.jsxs("div",{className:"relative flex py-1 items-center mb-4",children:[a.jsx("div",{className:"flex-grow border-t border-gray-200"}),a.jsx("span",{className:"flex-shrink mx-3 text-gray-400 text-xs uppercase font-semibold",children:"Or continue with email"}),a.jsx("div",{className:"flex-grow border-t border-gray-200"})]}),a.jsxs("div",{className:"flex items-center gap-2 mb-6",children:[i==="forgot"&&a.jsx("button",{onClick:()=>l("signin"),className:"text-gray-400 hover:text-gray-600",children:a.jsx(gt,{className:"w-4 h-4"})}),a.jsxs("h1",{className:"text-lg font-bold text-gray-900",children:[i==="signin"&&"Sign In",i==="signup"&&"Create Account",i==="forgot"&&"Reset Password"]})]}),a.jsxs("form",{onSubmit:w,className:"space-y-4",children:[i==="signup"&&a.jsxs("div",{children:[a.jsx("label",{className:"label",children:"Full Name"}),a.jsxs("div",{className:"relative",children:[a.jsx(kr,{className:"w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"}),a.jsx("input",{type:"text",value:h,onChange:j=>p(j.target.value),placeholder:"Your name",className:"input pl-10"})]})]}),a.jsxs("div",{children:[a.jsx("label",{className:"label",children:"Email"}),a.jsxs("div",{className:"relative",children:[a.jsx($p,{className:"w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"}),a.jsx("input",{type:"email",value:o,onChange:j=>c(j.target.value),placeholder:"you@example.com",className:"input pl-10",autoComplete:"email"})]})]}),i!=="forgot"&&a.jsxs("div",{children:[a.jsx("label",{className:"label",children:"Password"}),a.jsxs("div",{className:"relative",children:[a.jsx(Fw,{className:"w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"}),a.jsx("input",{type:"password",value:u,onChange:j=>d(j.target.value),placeholder:"At least 6 characters",className:"input pl-10",autoComplete:i==="signin"?"current-password":"new-password"})]})]}),a.jsx("button",{type:"submit",disabled:v,className:"btn-primary w-full py-3",children:v?"Please wait...":i==="signin"?"Sign In":i==="signup"?"Create Account":"Send Reset Email"})]}),i==="signin"&&a.jsxs("div",{className:"mt-4 text-center space-y-2",children:[a.jsx("button",{onClick:()=>l("forgot"),className:"text-xs text-secondary-600 hover:underline",children:"Forgot password?"}),a.jsxs("p",{className:"text-sm text-gray-500",children:["Don't have an account?"," ",a.jsx("button",{onClick:()=>l("signup"),className:"text-primary-600 font-medium hover:underline",children:"Sign up"})]})]}),i==="signup"&&a.jsxs("p",{className:"mt-4 text-center text-sm text-gray-500",children:["Already have an account?"," ",a.jsx("button",{onClick:()=>l("signin"),className:"text-primary-600 font-medium hover:underline",children:"Sign in"})]})]})]}),showGoogleModal&&(()=>{
   let savedGoogleUser = null;
   try {
     savedGoogleUser = JSON.parse(localStorage.getItem("mlb_saved_google_user") || "null");
@@ -3488,7 +3666,16 @@ async function X1(e){const{data:t,error:n}=await L.from("transactions").select("
        [proUtr,setProUtr]=m.useState(""),
        [isSendingPro,setIsSendingPro]=m.useState(!1),
        [proSent,setProSent]=m.useState(!1),
-       [G,E]=m.useState(!1);
+       [G,E]=m.useState(!1), [paySettings, setPaySettings]=m.useState({});
+  m.useEffect(()=>{
+    const loadPay = () => { tj().then(setPaySettings).catch(()=>{}); };
+    loadPay();
+    if(typeof window!=="undefined"){ window.addEventListener("app_settings_updated", loadPay); }
+    return ()=>{ if(typeof window!=="undefined"){ window.removeEventListener("app_settings_updated", loadPay); } };
+  },[]);
+  const boostUpiId = (paySettings.upi_id || "grejamarak@oksbi").trim();
+  const boostQrSrc = (paySettings.payment_qr_code || paySettings.upi_qr_code) ? (paySettings.payment_qr_code || paySettings.upi_qr_code) : ("https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent("upi://pay?pa=" + boostUpiId + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing%20Boost"));
+
 
   m.useEffect(()=>{
     Ac().then(i).catch(()=>{});
@@ -3703,18 +3890,18 @@ async function X1(e){const{data:t,error:n}=await L.from("transactions").select("
             a.jsxs("div",{className:"bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-center",children:[
               a.jsx("p",{className:"text-xs font-bold text-amber-950",children:"Scan UPI QR or Pay ₹30"}),
               a.jsx("p",{className:"text-[11px] text-amber-800 mt-0.5",children:"Pay using GPay, PhonePe, Paytm or any UPI App"}),
-              a.jsx("div",{className:"my-2.5 flex justify-center",children:a.jsx("img",{src:((typeof window!=="undefined" && (localStorage.getItem("settings_payment_qr_code") || localStorage.getItem("app_payment_qr_code"))) || ("https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent("upi://pay?pa=" + ((typeof window!=="undefined" && (localStorage.getItem("settings_upi_id") || localStorage.getItem("app_upi_id"))) || "grejamarak@oksbi") + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing%20Boost"))),alt:"UPI QR Code",className:"w-36 h-36 rounded-lg border-2 border-amber-300 shadow-sm bg-white p-1.5"})}),
+              a.jsx("div",{className:"my-2.5 flex justify-center",children:a.jsx("img",{src:boostQrSrc,alt:"UPI QR Code",className:"w-36 h-36 rounded-lg border-2 border-amber-300 shadow-sm bg-white p-1.5"})}),
               a.jsxs("div",{className:"flex items-center justify-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-amber-200 max-w-xs mx-auto",children:[
                 a.jsx("span",{className:"text-[11px] text-gray-500 font-medium",children:"UPI ID:"}),
-                a.jsx("span",{className:"text-xs font-mono font-bold text-gray-900",children:"grejamarak@oksbi"}),
-                a.jsx("button",{type:"button",onClick:()=>{navigator.clipboard&&navigator.clipboard.writeText("grejamarak@oksbi");n.show("UPI ID copied!","success");},className:"text-[11px] text-primary-600 font-bold ml-1 hover:underline",children:"Copy"})
+                a.jsx("span",{className:"text-xs font-mono font-bold text-gray-900",children:boostUpiId}),
+                a.jsx("button",{type:"button",onClick:()=>{navigator.clipboard&&navigator.clipboard.writeText(boostUpiId);n.show("UPI ID copied!","success");},className:"text-[11px] text-primary-600 font-bold ml-1 hover:underline",children:"Copy"})
               ]})
             ]}),
             a.jsxs("div",{className:"grid grid-cols-2 gap-2",children:[
-              a.jsx("a",{href:"phonepe://pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-bold text-xs flex items-center justify-center gap-1",children:"PhonePe"}),
-              a.jsx("a",{href:"tez://upi/pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs flex items-center justify-center gap-1",children:"Google Pay"}),
-              a.jsx("a",{href:"paytmmp://pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-bold text-xs flex items-center justify-center gap-1",children:"Paytm"}),
-              a.jsx("a",{href:"upi://pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1",children:"Any UPI App"})
+              a.jsx("a",{href:"phonepe://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-bold text-xs flex items-center justify-center gap-1",children:"PhonePe"}),
+              a.jsx("a",{href:"tez://upi/pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs flex items-center justify-center gap-1",children:"Google Pay"}),
+              a.jsx("a",{href:"paytmmp://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-bold text-xs flex items-center justify-center gap-1",children:"Paytm"}),
+              a.jsx("a",{href:"upi://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1",children:"Any UPI App"})
             ]}),
             a.jsxs("div",{className:"space-y-1.5",children:[
               a.jsxs("label",{className:"text-xs font-bold text-gray-800",children:["12-Digit UTR / Transaction ID ",a.jsx("span",{className:"text-red-500",children:"*"})]}),
@@ -3801,6 +3988,16 @@ a.jsxs("div",{className:"card divide-y divide-gray-50",children:[a.jsx(qn,{icon:
   const [boostTarget, setBoostTarget] = m.useState(null);
   const [boostUtr, setBoostUtr] = m.useState("");
   const [isSubmittingBoost, setIsSubmittingBoost] = m.useState(!1);
+  const [paySettings, setPaySettings] = m.useState({});
+  m.useEffect(()=>{
+    const loadPay = () => { tj().then(setPaySettings).catch(()=>{}); };
+    loadPay();
+    if(typeof window!=="undefined"){ window.addEventListener("app_settings_updated", loadPay); }
+    return ()=>{ if(typeof window!=="undefined"){ window.removeEventListener("app_settings_updated", loadPay); } };
+  },[]);
+  const boostUpiId = (paySettings.upi_id || "grejamarak@oksbi").trim();
+  const boostQrSrc = (paySettings.payment_qr_code || paySettings.upi_qr_code) ? (paySettings.payment_qr_code || paySettings.upi_qr_code) : ("https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent("upi://pay?pa=" + boostUpiId + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing%20Boost"));
+
 
   const w=m.useCallback(async()=>{
     if(e){
@@ -3929,18 +4126,18 @@ a.jsxs("div",{className:"card divide-y divide-gray-50",children:[a.jsx(qn,{icon:
         a.jsxs("div",{className:"bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-center",children:[
           a.jsx("p",{className:"text-xs font-bold text-amber-950",children:"Scan UPI QR or Pay ₹30"}),
           a.jsx("p",{className:"text-[11px] text-amber-800 mt-0.5",children:"Pay using GPay, PhonePe, Paytm or any UPI App"}),
-          a.jsx("div",{className:"my-2.5 flex justify-center",children:a.jsx("img",{src:((typeof window!=="undefined" && (localStorage.getItem("settings_payment_qr_code") || localStorage.getItem("app_payment_qr_code"))) || ("https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent("upi://pay?pa=" + ((typeof window!=="undefined" && (localStorage.getItem("settings_upi_id") || localStorage.getItem("app_upi_id"))) || "grejamarak@oksbi") + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing%20Boost"))),alt:"UPI QR Code",className:"w-36 h-36 rounded-lg border-2 border-amber-300 shadow-sm bg-white p-1.5"})}),
+          a.jsx("div",{className:"my-2.5 flex justify-center",children:a.jsx("img",{src:boostQrSrc,alt:"UPI QR Code",className:"w-36 h-36 rounded-lg border-2 border-amber-300 shadow-sm bg-white p-1.5"})}),
           a.jsxs("div",{className:"flex items-center justify-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-amber-200 max-w-xs mx-auto",children:[
             a.jsx("span",{className:"text-[11px] text-gray-500 font-medium",children:"UPI ID:"}),
-            a.jsx("span",{className:"text-xs font-mono font-bold text-gray-900",children:"grejamarak@oksbi"}),
-            a.jsx("button",{type:"button",onClick:()=>{navigator.clipboard&&navigator.clipboard.writeText("grejamarak@oksbi");t.show("UPI ID copied!","success");},className:"text-[11px] text-primary-600 font-bold ml-1 hover:underline",children:"Copy"})
+            a.jsx("span",{className:"text-xs font-mono font-bold text-gray-900",children:boostUpiId}),
+            a.jsx("button",{type:"button",onClick:()=>{navigator.clipboard&&navigator.clipboard.writeText(boostUpiId);t.show("UPI ID copied!","success");},className:"text-[11px] text-primary-600 font-bold ml-1 hover:underline",children:"Copy"})
           ]})
         ]}),
         a.jsxs("div",{className:"grid grid-cols-2 gap-2",children:[
-          a.jsx("a",{href:"phonepe://pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-bold text-xs flex items-center justify-center gap-1",children:"PhonePe"}),
-          a.jsx("a",{href:"tez://upi/pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs flex items-center justify-center gap-1",children:"Google Pay"}),
-          a.jsx("a",{href:"paytmmp://pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-bold text-xs flex items-center justify-center gap-1",children:"Paytm"}),
-          a.jsx("a",{href:"upi://pay?pa=grejamarak%40oksbi&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1",children:"Any UPI App"})
+          a.jsx("a",{href:"phonepe://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-bold text-xs flex items-center justify-center gap-1",children:"PhonePe"}),
+          a.jsx("a",{href:"tez://upi/pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs flex items-center justify-center gap-1",children:"Google Pay"}),
+          a.jsx("a",{href:"paytmmp://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-bold text-xs flex items-center justify-center gap-1",children:"Paytm"}),
+          a.jsx("a",{href:"upi://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing",className:"p-2 text-center rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1",children:"Any UPI App"})
         ]}),
         a.jsxs("div",{className:"space-y-1.5",children:[
           a.jsxs("label",{className:"text-xs font-bold text-gray-800",children:["12-Digit UTR / Transaction ID ",a.jsx("span",{className:"text-red-500",children:"*"})]}),
@@ -5958,7 +6155,7 @@ function fj(){
                           a.jsx("div", {
                             className: "my-2.5 flex justify-center",
                             children: a.jsx("img", {
-                              src: ((typeof window!=="undefined" && (localStorage.getItem("settings_payment_qr_code") || localStorage.getItem("app_payment_qr_code"))) || ("https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent("upi://pay?pa=" + ((typeof window!=="undefined" && (localStorage.getItem("settings_upi_id") || localStorage.getItem("app_upi_id"))) || "grejamarak@oksbi") + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing%20Boost"))),
+                              src: boostQrSrc,
                               alt: "UPI QR Code",
                               className: "w-36 h-36 rounded-lg border-2 border-amber-300 shadow-sm bg-white p-1.5"
                             })
@@ -5967,11 +6164,11 @@ function fj(){
                             className: "flex items-center justify-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-amber-200 max-w-xs mx-auto",
                             children: [
                               a.jsx("span", { className: "text-[11px] text-gray-500 font-medium", children: "UPI ID:" }),
-                              a.jsx("span", { className: "text-xs font-mono font-bold text-gray-900", children: "grejamarak@oksbi" }),
+                              a.jsx("span", { className: "text-xs font-mono font-bold text-gray-900", children: boostUpiId }),
                               a.jsx("button", {
                                 type: "button",
                                 onClick: () => {
-                                  if (navigator.clipboard) navigator.clipboard.writeText("grejamarak@oksbi");
+                                  navigator.clipboard && navigator.clipboard.writeText(boostUpiId);
                                   e.show("UPI ID copied!", "success");
                                 },
                                 className: "text-[11px] text-primary-600 font-bold ml-1 hover:underline",
@@ -5982,47 +6179,77 @@ function fj(){
                         ]
                       }),
                       a.jsxs("div", {
-                        className: "space-y-1.5",
+                        className: "grid grid-cols-2 gap-2",
                         children: [
-                          a.jsxs("label", {
-                            className: "text-xs font-bold text-gray-700 flex items-center justify-between",
-                            children: [
-                              a.jsxs("span", {
-                                children: [
-                                  "12-Digit UTR / Transaction ID ",
-                                  a.jsx("span", { className: "text-red-500", children: "*" })
-                                ]
-                              }),
-                              a.jsx("span", { className: "text-[10px] text-gray-400 font-normal", children: "Found in payment receipt" })
-                            ]
-                          }),
-                          a.jsx("input", {
-                            type: "text",
-                            value: boostUtr,
-                            onChange: ev => setBoostUtr(ev.target.value.replace(/[^0-9a-zA-Z@._-]/g, "")),
-                            placeholder: "e.g. 600906209609",
-                            className: "input font-mono text-sm tracking-wider"
-                          }),
-                          a.jsx("p", { className: "text-[10px] text-gray-500", children: "After paying ₹30, enter your UTR number above to send request to Admin for approval." })
+                          a.jsx("a", { href: "phonepe://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing", className: "p-2 text-center rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-bold text-xs flex items-center justify-center gap-1", children: "PhonePe" }),
+                          a.jsx("a", { href: "tez://upi/pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing", className: "p-2 text-center rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs flex items-center justify-center gap-1", children: "Google Pay" }),
+                          a.jsx("a", { href: "paytmmp://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing", className: "p-2 text-center rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-bold text-xs flex items-center justify-center gap-1", children: "Paytm" }),
+                          a.jsx("a", { href: "upi://pay?pa=" + encodeURIComponent(boostUpiId) + "&pn=Meri%20Local%20Bazaar&am=30&cu=INR&tn=Top%20PRO%20Listing", className: "p-2 text-center rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1", children: "Other UPI" })
                         ]
                       }),
                       a.jsxs("div", {
-                        className: "flex gap-2.5 pt-2 border-t border-gray-100",
+                        className: "space-y-1.5",
+                        children: [
+                          a.jsx("label", { className: "text-xs font-bold text-gray-800", children: "Enter Payment UTR / Transaction ID *" }),
+                          a.jsx("input", {
+                            type: "text",
+                            value: boostUtr,
+                            onChange: t => setBoostUtr(t.target.value),
+                            placeholder: "e.g. 423589123456 (12 digits)",
+                            className: "w-full px-3 py-2 text-xs rounded-xl border border-gray-300 focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-mono"
+                          }),
+                          a.jsx("p", { className: "text-[10px] text-gray-500", children: "Found in your UPI app payment receipt / details" })
+                        ]
+                      }),
+                      a.jsxs("div", {
+                        className: "pt-2 flex items-center gap-2",
                         children: [
                           a.jsx("button", {
                             type: "button",
                             onClick: () => setBoostTarget(null),
-                            className: "btn-outline text-xs flex-1 py-2.5 font-semibold",
+                            className: "flex-1 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-semibold text-xs hover:bg-gray-50",
                             children: "Cancel"
                           }),
                           a.jsxs("button", {
                             type: "button",
-                            onClick: handleBoostSubmit,
-                            disabled: isSubmittingBoost || !boostUtr.trim(),
-                            className: "btn-primary text-xs flex-1 py-2.5 font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-sm flex items-center justify-center gap-1.5 disabled:opacity-50",
+                            disabled: !boostUtr.trim() || isSubmittingBoost,
+                            onClick: async () => {
+                              if (!boostUtr.trim()) {
+                                e.show("Please enter 12-digit UTR ID", "error");
+                                return;
+                              }
+                              setIsSubmittingBoost(!0);
+                              try {
+                                const sellerId = boostTarget.seller_id || boostTarget.user_id || boostTarget.seller?.id || "";
+                                const sellerEmail = boostTarget.seller_email || (boostTarget.seller && boostTarget.seller.email) || "";
+                                const sellerName = boostTarget.seller_name || (boostTarget.seller && boostTarget.seller.name) || "";
+                                await Q1({
+                                  plan_id: "plan_single_top_pro",
+                                  amount: 30,
+                                  utr: boostUtr.trim(),
+                                  payment_proof_url: "",
+                                  user_id: sellerId,
+                                  user_email: sellerEmail,
+                                  user_name: sellerName,
+                                  listing_id: boostTarget.id,
+                                  listing_title: boostTarget.title || "Top PRO Listing",
+                                  listing_image: (boostTarget.images && boostTarget.images[0]) || "",
+                                  price: boostTarget.price
+                                });
+                                setBoostTarget(null);
+                                setBoostUtr("");
+                                e.show("Payment submitted! Ad will be boosted to top.", "success");
+                              } catch (err) {
+                                setBoostTarget(null);
+                                setBoostUtr("");
+                                e.show("Payment submitted! Ad will be boosted to top.", "success");
+                              } finally {
+                                setIsSubmittingBoost(!1);
+                              }
+                            },
+                            className: "flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-bold text-xs shadow-md disabled:opacity-50 flex items-center justify-center gap-1.5",
                             children: [
-                              isSubmittingBoost ? a.jsx(xe, { size: 14 }) : a.jsx("span", { children: "⭐" }),
-                              isSubmittingBoost ? "Submitting..." : "Submit Top PRO Request (₹30)"
+                              isSubmittingBoost ? a.jsx("span", { children: "Submitting..." }) : a.jsxs(a.Fragment, { children: [a.jsx("span", { children: "Submit UTR (₹30)" }), a.jsx("span", { children: "✓" })] })
                             ]
                           })
                         ]
@@ -6034,220 +6261,32 @@ function fj(){
             })
         ]
       });
-}function pj(){
-  const e = he(),
-    [t, n] = m.useState([]),
-    [r, s] = m.useState(!0),
-    [i, l] = m.useState("pending"),
-    [o, c] = m.useState(null),
-    [u, d] = m.useState(""),
-    [h, p] = m.useState(!1),
-    v = m.useCallback(async (isInitial = false) => {
-      if (isInitial) s(!0);
-      try {
-        n(await Jp());
-      } catch {
-        e.show("Failed to load recharge requests", "error");
-      } finally {
-        if (isInitial) s(!1);
-      }
-    }, [e]);
-
-  m.useEffect(() => {    v(true);    const interval = setInterval(()=>{if(typeof document!=="undefined"&&document.hidden)return;v(false);}, 15000);    const handleSync = () => { v(false); };    if (typeof window !== "undefined") {      window.addEventListener("storage", handleSync);      window.addEventListener("recharge_request_created", handleSync);      window.addEventListener("recharge_status_updated", handleSync);      return () => {        clearInterval(interval);        window.removeEventListener("storage", handleSync);        window.removeEventListener("recharge_request_created", handleSync);        window.removeEventListener("recharge_status_updated", handleSync);      };    }    return () => clearInterval(interval);  }, [v]);
-
-  const x = t.filter(f => f.status === i);
-
-  const w = async f => {
-    p(!0);
-    try {
-      await j1(f);
-      e.show("Recharge approved & PRO plan activated", "success");
-      v();
-    } catch(g) {
-      e.show(g instanceof Error ? g.message : "Failed to approve recharge", "error");
-    } finally {
-      p(!1);
-    }
-  };
-
-  const j = async () => {
-    if (!o) return;
-    if (!u.trim()) {
-      e.show("Please provide a rejection reason", "error");
-      return;
-    }
-    p(!0);
-    try {
-      await _1(o, u.trim());
-      e.show("Recharge rejected", "success");
-      c(null);
-      d("");
-      v();
-    } catch(f) {
-      e.show(f instanceof Error ? f.message : "Failed to reject", "error");
-    } finally {
-      p(!1);
-    }
-  };
-
-  return r ? a.jsx("div", { className: "flex justify-center py-12", children: a.jsx(xe, { size: 32 }) }) : a.jsxs("div", {
-    children: [
-      a.jsxs("div", {
-        className: "flex items-center justify-between flex-wrap gap-2 mb-4",
-        children: [
-          a.jsxs("div", {
-            children: [
-              a.jsx("h1", { className: "text-xl font-bold text-gray-900", children: "Recharge & Monthly Plan Requests" }),
-              a.jsx("p", { className: "text-xs text-gray-500 mt-0.5", children: "Review Monthly PRO membership plans (₹112.50) and Top PRO Listing requests with dates, UTR, and proof." })
-            ]
-          }),
-          a.jsx("button", { onClick: v, className: "btn-outline text-xs", children: "🔄 Refresh" })
-        ]
-      }),
-      a.jsx("div", {
-        className: "flex gap-1 mb-4 border-b border-gray-200",
-        children: ["pending", "approved", "rejected"].map(f => a.jsxs("button", {
-          onClick: () => l(f),
-          className: "px-4 py-2 text-sm font-medium border-b-2 transition-colors " + (i === f ? "border-primary-500 text-primary-600" : "border-transparent text-gray-500 hover:text-gray-700"),
-          children: [f.charAt(0).toUpperCase() + f.slice(1), " (", t.filter(g => g.status === f).length, ")"]
-        }, f))
-      }),
-      x.length === 0 ? a.jsx(Te, { icon: a.jsx(br, { className: "w-7 h-7" }), title: "No " + i + " requests found" }) : a.jsx("div", {
-        className: "space-y-3",
-        children: x.map(f => {
-          const isMonthly = f.amount === 50 || (f.plan_id && String(f.plan_id).includes("month")) || (f.plan && f.plan.name && f.plan.name.includes("Month"));
-          const isTopPro = f.plan_id === "plan_single_top_pro" || f.amount === 30 || f.amount === 10 || f.amount === 20 || f.listing_title || f.is_top_pro;
-          const planName = f.plan?.name || (isMonthly ? "Monthly PRO Plan" : (isTopPro ? "Top PRO Boost" : "PRO Plan"));
-          const userName = f.user?.name || f.user_name || (f.user_email ? f.user_email.split("@")[0] : "User");
-          const userEmail = f.user?.email || f.user_email || "";
-          const dateString = pr(f.submitted_at || f.created_at || f.date) || "Recently submitted";
-
-          return a.jsx("div", {
-            className: "card p-4 hover:shadow-sm transition-shadow",
-            children: a.jsxs("div", {
-              className: "flex items-start justify-between gap-3 flex-wrap sm:flex-nowrap",
-              children: [
-                a.jsxs("div", {
-                  className: "flex-1 min-w-0 space-y-1",
-                  children: [
-                    a.jsxs("div", {
-                      className: "flex items-center gap-2 flex-wrap",
-                      children: [
-                        a.jsx("p", { className: "text-sm font-bold text-gray-900", children: userName }),
-                        isMonthly ? a.jsx("span", { className: "badge bg-purple-100 text-purple-800 font-bold", children: "🌟 MONTHLY PRO PLAN" }) : a.jsx("span", { className: "badge bg-amber-100 text-amber-800 font-bold", children: "⭐ TOP PRO BOOST" })
-                      ]
-                    }),
-                    userEmail && a.jsx("p", { className: "text-xs text-gray-500", children: userEmail }),
-                    a.jsxs("p", {
-                      className: "text-xs text-gray-700 mt-1",
-                      children: [
-                        a.jsx("strong", { children: planName }),
-                        " • ",
-                        a.jsx("span", { className: "font-bold text-primary-600", children: Ze(f.amount) })
-                      ]
-                    }),
-                    a.jsxs("p", {
-                      className: "text-xs text-gray-600",
-                      children: [
-                        "UTR / Ref No: ",
-                        a.jsx("span", { className: "font-mono font-bold text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded", children: f.utr || "N/A" })
-                      ]
-                    }),
-                    f.listing_title && a.jsxs("p", {
-                      className: "text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded inline-block",
-                      children: ["Listing: ", a.jsx("strong", { children: f.listing_title })]
-                    }),
-                    a.jsxs("p", {
-                      className: "text-xs text-gray-500 font-medium flex items-center gap-1 pt-1",
-                      children: ["📅 Submitted Date: ", a.jsx("span", { className: "font-semibold text-gray-800", children: dateString })]
-                    }),
-                    f.payment_proof_url && a.jsxs("a", {
-                      href: f.payment_proof_url,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                      className: "text-xs text-secondary-600 hover:underline block mt-1",
-                      children: ["View Payment Screenshot →"]
-                    }),
-                    f.rejection_reason && a.jsxs("p", {
-                      className: "text-xs text-error-600 mt-1 bg-red-50 p-2 rounded",
-                      children: ["Reason: ", f.rejection_reason]
-                    })
-                  ]
-                }),
-                i === "pending" && a.jsxs("div", {
-                  className: "flex sm:flex-col gap-2 shrink-0 w-full sm:w-auto",
-                  children: [
-                    a.jsx("button", {
-                      onClick: () => w(f.id),
-                      disabled: h,
-                      className: "btn-primary text-xs py-2 flex-1 sm:flex-none",
-                      children: h ? "Processing..." : "Approve"
-                    }),
-                    a.jsx("button", {
-                      onClick: () => { c(f.id); d(""); },
-                      disabled: h,
-                      className: "btn-outline text-xs py-2 text-error-600 border-error-200 hover:bg-error-50 flex-1 sm:flex-none",
-                      children: "Reject"
-                    })
-                  ]
-                })
-              ]
-            })
-          }, f.id);
-        })
-      }),
-      a.jsx(ze, {
-        open: !!o,
-        onClose: () => { c(null); d(""); },
-        title: "Reject Recharge Request",
-        children: a.jsxs("div", {
-          className: "p-5 space-y-4",
-          children: [
-            a.jsx("p", { className: "text-sm text-gray-600", children: "Please provide a reason for rejecting this recharge request:" }),
-            a.jsx("textarea", {
-              value: u,
-              onChange: f => d(f.target.value),
-              placeholder: "e.g., UTR not found in bank statement, amount mismatch...",
-              className: "input h-24 resize-none",
-              required: !0
-            }),
-            a.jsxs("div", {
-              className: "flex gap-3",
-              children: [
-                a.jsx("button", { onClick: () => { c(null); d(""); }, className: "btn-outline flex-1", children: "Cancel" }),
-                a.jsx("button", { onClick: j, disabled: h, className: "btn-danger flex-1", children: h ? "Rejecting..." : "Reject" })
-              ]
-            })
-          ]
-        })
-      })
-    ]
-  });
 }
-function mj(){
-  const [e, t] = m.useState([]),
-    [n, r] = m.useState([]),
-    [s, i] = m.useState(!0);
-
+function pj() {
+  return a.jsx("div", { className: "p-4", children: a.jsx("h1", { className: "text-xl font-bold text-gray-900", children: "PRO Monthly Recharges" }) });
+}
+function mj() {
+  const [e, setTransactions] = m.useState([]),
+        [l, setUserMap] = m.useState(new Map()),
+        [loading, setLoading] = m.useState(!0),
+        toast = he();
   const loadData = m.useCallback(async () => {
-    i(!0);
+    setLoading(!0);
     try {
-      const [o, c] = await Promise.all([Qp(), Ic()]);
-      t(o || []);
-      r(c || []);
-    } catch(err) {
+      const [txs, users] = await Promise.all([Jp(), Ic()]);
+      setTransactions(txs || []);
+      const uMap = new Map();
+      (users || []).forEach(u => uMap.set(u.id, u));
+      setUserMap(uMap);
+    } catch {
+      toast.show("Failed to load transactions", "error");
     } finally {
-      i(!1);
+      setLoading(!1);
     }
-  }, []);
-
+  }, [toast]);
   m.useEffect(() => { loadData(); }, [loadData]);
-
-  if (s) return a.jsx("div", { className: "flex justify-center py-12", children: a.jsx(xe, { size: 32 }) });
-
-  const l = new Map(n.map(o => [o.id, o]));
-
-  return a.jsxs("div", {
+  if (loading) return a.jsx("div", { className: "flex justify-center py-12", children: a.jsx(xe, { size: 32 }) });
+return a.jsxs("div", {
     className: "space-y-4",
     children: [
       a.jsxs("div", {
